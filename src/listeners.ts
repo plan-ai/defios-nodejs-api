@@ -1,48 +1,41 @@
 import * as anchor from '@project-serum/anchor'
-import { Defios } from './defios'
+import { Defios } from '../type-file/defios'
 import {
+    IPullRequestSent,
+    IAddCommitToPR,
+    IAddChildObjective,
+    IAddObjectiveDataEvent,
+    IAddRoadmapDataEvent,
     INameRouterCreated,
     IVerifiedUserAdded,
     ICommitAdded,
     IIssueCreated,
     IRepositoryCreated,
     IIssueStaked,
-    ITokensClaimed, 
-} from './events'
-
-import{
-    IPullRequestSent,
-    IAddCommitToPR,
-    IAddChildObjective,
-    IAddObjectiveDataEvent,
-    IAddRoadmapDataEvent,
     IIssueUnstaked,
     IPullRequestAccepted,
     IVestingScheduleChanged,
     IDefaultVestingScheduleChanged,
     IPullRequestStaked,
-    IPullRequestUnstaked
+    IPullRequestUnstaked,
 } from './events'
 
-import { commitCreated } from './handlers/commitCreated'
-import { issueCreated } from './handlers/issueCreated'
-import { issueStaked } from './handlers/issueStaked'
-import { issueUnstaked } from './handlers/issueUnstaked'
-import { repositoryCreated } from './handlers/repositoryCreated'
-import { addVerifiedUser } from './handlers/verifiedUserAdded'
-import { tokensClaimed } from './handlers/tokensClaimed'
-
-import {addObjectiveData}   from './handlers/addObjectiveData'
-import {addRoadmapData}     from './handlers/addRoadmapData' //done
-import {addChildObjective}  from './handlers/addChildObjective' 
-import {addCommitToPR}      from './handlers/addCommitToPR'
-import {pullRequestSent}    from './handlers/pullRequestSent'
-import {pullRequestAccepted} from './handlers/pullRequestAccepted'
-import {vestingScheduleChanged} from './handlers/vestingScheduleChanged' //done
-import {defaultVestingScheduleChanged} from './handlers/defaultVestingScheduleChanged' 
-import {pullRequestStaked} from './handlers/pullRequestStaked'
-import {pullRequestUnstaked} from './handlers/pullRequestUnstaked'
-
+import { commitCreated } from './handlers/commitCreated' //done-testing needed push changed to concat&updateOne//
+import { issueCreated } from './handlers/issueCreated' //done//
+import { issueStaked } from './handlers/issueStaked' //done//
+import { issueUnstaked } from './handlers/issueUnstaked' //done//
+import { repositoryCreated } from './handlers/repositoryCreated'//too much changed in rust justification needed
+import { addVerifiedUser } from './handlers/verifiedUserAdded' //done//
+import { addObjectiveData } from './handlers/addObjectiveData' //roadmap graph clarification
+import { addRoadmapData } from './handlers/addRoadmapData' //roadmap_account? is it find,update or create
+import { addChildObjective } from './handlers/addChildObjective' //roadmap graph clarification
+import { addCommitToPR } from './handlers/addCommitToPR'//dk
+import { pullRequestSent } from './handlers/pullRequestSent'//dk
+import { pullRequestAccepted } from './handlers/pullRequestAccepted'//dk
+import { vestingScheduleChanged } from './handlers/vestingScheduleChanged' //explain
+import { defaultVestingScheduleChanged } from './handlers/defaultVestingScheduleChanged'//explain
+import { pullRequestStaked } from './handlers/pullRequestStaked'//models need to be changed
+import { pullRequestUnstaked } from './handlers/pullRequestUnstaked'//models need to be changed
 
 export const addEventListener = (program: anchor.Program<Defios>) => {
     program.addEventListener('NameRouterCreated', (res: INameRouterCreated) => {
@@ -110,47 +103,45 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
             })
     })
 
-    program.addEventListener('TokensClaimed', (res: ITokensClaimed) => {
-        tokensClaimed(res)
-            .then(() => {
-                console.log('ClaimedTokens')
-            })
-            .catch((e) => {
-                console.log('Error Adding claim token: ', e)
-            })
-    })
+    //New Listeners
+    program.addEventListener(
+        'ObjectiveDataAdded',
+        (res: IAddObjectiveDataEvent) => {
+            addObjectiveData(res)
+                .then(() => {
+                    console.log('ObjectiveDataAdded')
+                })
+                .catch((e) => {
+                    console.log('Error Adding Objective Data: ', e)
+                })
+        }
+    )
 
-    //New Listeners 
-    program.addEventListener('ObjectiveDataAdded', (res: IAddObjectiveDataEvent) => {
-        addObjectiveData(res)
-            .then(() => {
-                console.log('ObjectiveDataAdded')
-            })
-            .catch((e) => {
-                console.log('Error Adding Objective Data: ', e)
-            })
-    })
-    
+    program.addEventListener(
+        'RoadmapDataAdded',
+        (res: IAddRoadmapDataEvent) => {
+            addRoadmapData(res)
+                .then(() => {
+                    console.log('RoadmapDataAdded')
+                })
+                .catch((e) => {
+                    console.log('Error Adding Roadmap Data: ', e)
+                })
+        }
+    )
 
-    program.addEventListener('RoadmapDataAdded', (res: IAddRoadmapDataEvent) => {
-        addRoadmapData(res)
-            .then(() => {
-                console.log('RoadmapDataAdded')
-            })
-            .catch((e) => {
-                console.log('Error Adding Roadmap Data: ', e)
-            })
-    })
-
-    program.addEventListener('ChildObjectiveAdded', (res: IAddChildObjective) => {
-        addChildObjective(res)
-            .then(() => {   
-                console.log('ChildObjectiveAdded')
-            })
-            .catch((e) => {
-                console.log('Error Adding Child Objective: ', e)
-            })
-    })
+    program.addEventListener(
+        'ChildObjectiveAdded',
+        (res: IAddChildObjective) => {
+            addChildObjective(res)
+                .then(() => {
+                    console.log('ChildObjectiveAdded')
+                })
+                .catch((e) => {
+                    console.log('Error Adding Child Objective: ', e)
+                })
+        }
+    )
 
     program.addEventListener('PullRequestSent', (res: IPullRequestSent) => {
         pullRequestSent(res)
@@ -159,52 +150,60 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
             })
             .catch((e) => {
                 console.log('Error Adding Pull Request: ', e)
-
             })
     })
 
-    program.addEventListener('CommitAddedToPullRequest', (res: IAddCommitToPR) => {
-        addCommitToPR(res)
-            .then(() => {
-                console.log('CommitAddedToPullRequest')
-            })
-            .catch((e) => {
-                console.log('Error Adding Commit to Pull Request: ', e)
-            })
-    })
+    program.addEventListener(
+        'CommitAddedToPullRequest',
+        (res: IAddCommitToPR) => {
+            addCommitToPR(res)
+                .then(() => {
+                    console.log('CommitAddedToPullRequest')
+                })
+                .catch((e) => {
+                    console.log('Error Adding Commit to Pull Request: ', e)
+                })
+        }
+    )
 
-    program.addEventListener('PullRequestAccepted', (res: IPullRequestAccepted) => {
-        pullRequestAccepted(res)
+    program.addEventListener(
+        'PullRequestAccepted',
+        (res: IPullRequestAccepted) => {
+            pullRequestAccepted(res)
+                .then(() => {
+                    console.log('PullRequestAccepted')
+                })
+                .catch((e) => {
+                    console.log('Error Accepting Pull Request: ', e)
+                })
+        }
+    )
 
-            .then(() => {
-                console.log('PullRequestAccepted')
-            })
-            .catch((e) => {
-                console.log('Error Accepting Pull Request: ', e)
-            })
-    })
+    program.addEventListener(
+        'VestingScheduleChanged',
+        (res: IVestingScheduleChanged) => {
+            vestingScheduleChanged(res)
+                .then(() => {
+                    console.log('VestingScheduleChanged')
+                })
+                .catch((e) => {
+                    console.log('Error Changing Vesting Schedule: ', e)
+                })
+        }
+    )
 
-    program.addEventListener('VestingScheduleChanged', (res: IVestingScheduleChanged) => {
-        vestingScheduleChanged(res)
-            .then(() => {
-                console.log('VestingScheduleChanged')
-            })
-            .catch((e) => {
-                console.log('Error Changing Vesting Schedule: ', e)
-            })
-
-    })
-
-    program.addEventListener('DefaultVestingScheduleChanged', (res: IDefaultVestingScheduleChanged) => {
-        defaultVestingScheduleChanged(res)
-            .then(() => {
-                console.log('DefaultVestingScheduleChanged')
-            })
-            .catch((e) => {
-                console.log('Error Changing Default Vesting Schedule: ', e)
-            })
-
-    })
+    program.addEventListener(
+        'DefaultVestingScheduleChanged',
+        (res: IDefaultVestingScheduleChanged) => {
+            defaultVestingScheduleChanged(res)
+                .then(() => {
+                    console.log('DefaultVestingScheduleChanged')
+                })
+                .catch((e) => {
+                    console.log('Error Changing Default Vesting Schedule: ', e)
+                })
+        }
+    )
 
     program.addEventListener('PullRequestStaked', (res: IPullRequestStaked) => {
         pullRequestStaked(res)
@@ -214,19 +213,20 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
             .catch((e) => {
                 console.log('Error Staking Pull Request: ', e)
             })
-
     })
 
-    program.addEventListener('PullRequestUnstaked', (res: IPullRequestUnstaked) => {
-        pullRequestUnstaked(res)
-            .then(() => {
-                console.log('PullRequestUnstaked')
-            })
-            .catch((e) => {
-                console.log('Error Unstaking Pull Request ', e)
-            })
-
-    })
+    program.addEventListener(
+        'PullRequestUnstaked',
+        (res: IPullRequestUnstaked) => {
+            pullRequestUnstaked(res)
+                .then(() => {
+                    console.log('PullRequestUnstaked')
+                })
+                .catch((e) => {
+                    console.log('Error Unstaking Pull Request ', e)
+                })
+        }
+    )
 
     console.log('Listeners Added')
 }

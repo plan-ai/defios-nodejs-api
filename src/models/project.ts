@@ -4,7 +4,7 @@ import { IToken, Token } from './token'
 interface IProject {
     project_account: mongoose.Schema.Types.String
     project_owner_github: mongoose.Schema.Types.String
-    project_token: typeof Token
+    project_token: mongoose.Schema.Types.ObjectId
     project_name: mongoose.Schema.Types.String
     project_status: 'Secure' | 'Vulnerable' | 'Broken'
     project_repo_link: mongoose.Schema.Types.String
@@ -19,8 +19,10 @@ interface IProject {
     num_contributions_chg_perc: mongoose.Schema.Types.Number
     num_contributions_graph: mongoose.Schema.Types.String
     is_token_native: mongoose.Schema.Types.Boolean
-    internal_tags: string[]
-    claimers_pending: string[]
+    internal_tags: mongoose.Schema.Types.Mixed
+    coins_staked: mongoose.Schema.Types.Number
+    coins_rewarded: mongoose.Schema.Types.Number
+    claimers_pending: mongoose.Schema.Types.String[]
 }
 
 export const ProjectSchema = new mongoose.Schema<IProject>(
@@ -78,8 +80,18 @@ export const ProjectSchema = new mongoose.Schema<IProject>(
         is_token_native: {
             type: mongoose.Schema.Types.Boolean,
         },
-        internal_tags: Array<string>,
-        claimers_pending: Array<string>,
+        internal_tags:{
+            type: mongoose.Schema.Types.Mixed
+        },
+        coins_staked:{
+            type: mongoose.Schema.Types.Number,
+        },
+        coins_rewarded:{
+            type: mongoose.Schema.Types.Number,
+        },
+        claimers_pending: {
+            type:[mongoose.Schema.Types.String]
+        },
     },
     { versionKey: false }
 )

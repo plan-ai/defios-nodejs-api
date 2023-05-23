@@ -2,17 +2,18 @@ import mongoose from 'mongoose'
 
 export interface IIssue {
     issue_account: mongoose.Schema.Types.String
+    issue_creator_gh: mongoose.Schema.Types.String
     issue_project_id: mongoose.Schema.Types.String
-    issue_title: mongoose.Schema.Types.String
     issue_project_name: mongoose.Schema.Types.String
+    issue_title: mongoose.Schema.Types.String
     issue_state: 'open' | 'voting' | 'winner_declared' | 'closed'
     issue_summary: mongoose.Schema.Types.String
     issue_gh_url: mongoose.Schema.Types.String
-    issue_stake_amount: Number
+    issue_stake_amount: mongoose.Schema.Types.Number
     issue_stake_token_symbol: mongoose.Schema.Types.String
     issue_stake_token_url: mongoose.Schema.Types.String
     issue_prs: IIssuePRs[]
-    issue_tags: mongoose.Schema.Types.Array
+    issue_tags: Array<mongoose.Schema.Types.String>
 }
 
 export interface IIssuePRs {
@@ -56,15 +57,17 @@ export const IssueSchema = new mongoose.Schema<IIssue>(
     {
         issue_account: {
             type: mongoose.Schema.Types.String,
-            required: true,
+        },
+        issue_creator_gh: {
+            type: mongoose.Schema.Types.String,
         },
         issue_project_id: {
             type: mongoose.Schema.Types.String,
         },
-        issue_title: {
+        issue_project_name: {
             type: mongoose.Schema.Types.String,
         },
-        issue_project_name: {
+        issue_title: {
             type: mongoose.Schema.Types.String,
         },
         issue_state: {
