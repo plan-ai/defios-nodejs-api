@@ -1,27 +1,27 @@
 import { IPullRequestSent } from '../events'
 import { IIssuePRs, Issues, IIssue } from '../models/issues'
-import { User } from '../models/users'
 
-export const pullRequestSent = async (commit: IPullRequestSent) => {
+export const pullRequestSent = async (res: IPullRequestSent) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const user = await User.findOne({
-                user_phantom_address: commit.sent_by.toString(),
+            const issue = await Issues.findOne({
+                issue_account: res.issue.toString(),
             })
-
-            if (user) {
-                user.Contributions.push({
-                    contribution_type: 'Pull Request',
-                    contribution_link: commit.commits.toString(),
-                    contribution_amount: 0,
-                    contribution_token: '',
-                    contribution_project: '',
-                    contribution_issue: '',
+            if (issue) {
+                issue.issue_prs.push({
+                    issue_pr_account: res.pull_request.toString(),
+                    issue_pr_author: res.sent_by.toString(),
+                    issue_pr_link: res.metadata_uri.toString(),
+                    issue_originality_score: 0,
+                    issue_author_github: issue.issue_creator_gh.toString(),
+                    issue_title: issue.issue_title.toString(),
+                    issue_vote_amount: 0,
                 })
-                user.save()
+                issue.save()
+                resolve(issue)
             }
         } catch (err) {
-            reject(err);
+            reject(err)
         }
     })
 }

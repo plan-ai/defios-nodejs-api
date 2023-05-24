@@ -5,6 +5,8 @@ export interface IPullRequestSent {
     sent_by: PublicKey
     commits: Array<PublicKey>
     metadata_uri: String
+    issue: PublicKey
+    pull_request: PublicKey
 }
 
 export interface IAddCommitToPR {
@@ -69,11 +71,13 @@ export interface IIssueCreated {
 export interface IRepositoryCreated {
     repository_creator: PublicKey
     repository_account: PublicKey
-    //check
-    rewards_mint: PublicKey
+    rewards_mint?: PublicKey
     uri: String
     name: String
     description: String
+    token_name?: String
+    token_image?: String
+    token_metadata_uri?: String
 }
 
 export interface IIssueStaked {

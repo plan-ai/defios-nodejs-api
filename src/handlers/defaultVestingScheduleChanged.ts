@@ -1,9 +1,9 @@
-import { IVestingScheduleChanged } from '../events'
+import { IDefaultVestingScheduleChanged } from '../events'
 import { IIssuePRs, Issues, IIssue } from '../models/issues'
 import { Token } from '../models/token'
 
 export const defaultVestingScheduleChanged = async (
-    commit: IVestingScheduleChanged
+    commit: IDefaultVestingScheduleChanged
 ) => {
     return new Promise(async (resolve, reject) => {
         const token_obj = await Token.findOne({

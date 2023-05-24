@@ -14,6 +14,7 @@ export interface IIssue {
     issue_stake_token_url: mongoose.Schema.Types.String
     issue_prs: IIssuePRs[]
     issue_tags: Array<mongoose.Schema.Types.String>
+    rewardee: mongoose.Schema.Types.String
 }
 
 export interface IIssuePRs {
@@ -93,6 +94,9 @@ export const IssueSchema = new mongoose.Schema<IIssue>(
         },
         issue_tags: {
             type: [mongoose.Schema.Types.String],
+        },
+        rewardee: {
+            type: mongoose.Schema.Types.String,
         },
     },
     { versionKey: false }

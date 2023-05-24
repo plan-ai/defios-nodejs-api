@@ -1,27 +1,45 @@
 import { IPullRequestAccepted } from '../events'
 import { IIssuePRs, Issues, IIssue } from '../models/issues'
+import { Project } from '../models/project'
+import { User } from '../models/users'
 
-export const pullRequestAccepted = async (commit: IPullRequestAccepted) => {
+export const pullRequestAccepted = async (res: IPullRequestAccepted) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const issue = await Issues.findOne({
-                issue_account: commit.issue.toString(),
+            const user = await User.findOne({
+                user_phantom_address: res.pull_request_addr.toString(),
             })
-            
+            if (!user) {
+                reject('User not found')
+                return
+            }
+            const repository = await Project.findOne({
+                project_account: res.repository.toString(),
+            })
+            if (!repository) {
+                reject('Repository not found')
+                return
+            }
+            const issue = await Issues.findOne({
+                issue_account: res.issue.toString(),
+            })
+            if (!issue) {
+                reject('Issue not found')
+                return
+            }
+            if (issue.issue_project_id.toString() !== res.issue.toString()) {
+                reject('Issue does not belong to the Repository')
+                return
+            }
             if (issue) {
-                issue.issue_prs.push({
-                    issue_pr_account: commit.pull_request_addr.toString(),
-                    issue_pr_author: commit.pull_request_addr.toString(),
-                    issue_pr_link: commit.repository,
-                    issue_originality_score: 0,
-                    issue_author_github: '',
-                    issue_title: '',
-                    issue_vote_amount: 0,
+                issue.updateOne({
+                    issue_state: 'closed',
+                    rewardee: res.pull_request_addr,
                 })
                 issue.save()
+                resolve('Pull Request Accepted/Merged Successfully')
             }
-        }
-        catch (err) {
+        } catch (err) {
             reject(err)
         }
     })

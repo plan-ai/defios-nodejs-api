@@ -1,5 +1,5 @@
 import { IPullRequestStaked } from '../events'
-import { Issues, } from '../models/issues'
+import { Issues } from '../models/issues'
 import { Contribution, User } from '../models/users'
 
 export const pullRequestStaked = async (res: IPullRequestStaked) => {
@@ -13,21 +13,30 @@ export const pullRequestStaked = async (res: IPullRequestStaked) => {
                 return
             }
             const issue = await Issues.findOne({
-                issue_account: res.issue_account.toString(),
+                'issue_prs.issue_pr_account': res.pr_account,
             })
             if (!issue) {
                 reject('issue not found')
                 return
             }
-            issue.updateOne({
-                issue_stake_amount:
-                    parseInt(res.staked_amount.toString()) +
-                    parseInt(issue.issue_stake_amount.toString()),
+            const updatedPR = issue.issue_prs.map((item) => {
+                if (
+                    item.issue_pr_account.toString() !==
+                    res.pr_account.toString()
+                ) {
+                    return item
+                } else {
+                    item.issue_vote_amount =
+                        parseInt(res.staked_amount.toString()) +
+                        parseInt(item.issue_vote_amount.toString())
+                    return item
+                }
             })
+            issue.issue_prs = updatedPR
             issue.save()
             const contribution = new Contribution({
                 contributor_github: user.user_github,
-                contribution_link: res.issue_contribution_link,
+                contribution_link: res.pr_contribution_link,
                 contribution_timestamp: new Date(),
                 contribution_amt: res.staked_amount.toString(),
                 contribution_token_symbol: issue.issue_stake_token_symbol,
@@ -36,7 +45,7 @@ export const pullRequestStaked = async (res: IPullRequestStaked) => {
             })
             user.user_contributions.push(contribution)
             user.save()
-            resolve('Staked Successfully')
+            resolve('Staked on PR Successfully')
         } catch (err) {
             reject(err)
         }

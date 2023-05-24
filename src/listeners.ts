@@ -20,22 +20,22 @@ import {
     IPullRequestUnstaked,
 } from './events'
 
-import { commitCreated } from './handlers/commitCreated' //done-testing needed push changed to concat&updateOne//
+import { commitCreated } from './handlers/commitCreated' //done-noDB//
 import { issueCreated } from './handlers/issueCreated' //done//
 import { issueStaked } from './handlers/issueStaked' //done//
 import { issueUnstaked } from './handlers/issueUnstaked' //done//
-import { repositoryCreated } from './handlers/repositoryCreated'//too much changed in rust justification needed
+import { repositoryCreated } from './handlers/repositoryCreated' //done//
 import { addVerifiedUser } from './handlers/verifiedUserAdded' //done//
 import { addObjectiveData } from './handlers/addObjectiveData' //roadmap graph clarification
 import { addRoadmapData } from './handlers/addRoadmapData' //roadmap_account? is it find,update or create
 import { addChildObjective } from './handlers/addChildObjective' //roadmap graph clarification
-import { addCommitToPR } from './handlers/addCommitToPR'//dk
-import { pullRequestSent } from './handlers/pullRequestSent'//dk
-import { pullRequestAccepted } from './handlers/pullRequestAccepted'//dk
+import { addCommitToPR } from './handlers/addCommitToPR' //done-noDB//
+import { pullRequestSent } from './handlers/pullRequestSent' //done//
+import { pullRequestAccepted } from './handlers/pullRequestAccepted' //done//
 import { vestingScheduleChanged } from './handlers/vestingScheduleChanged' //explain
-import { defaultVestingScheduleChanged } from './handlers/defaultVestingScheduleChanged'//explain
-import { pullRequestStaked } from './handlers/pullRequestStaked'//models need to be changed
-import { pullRequestUnstaked } from './handlers/pullRequestUnstaked'//models need to be changed
+import { defaultVestingScheduleChanged } from './handlers/defaultVestingScheduleChanged' //explain
+import { pullRequestStaked } from './handlers/pullRequestStaked' //done//
+import { pullRequestUnstaked } from './handlers/pullRequestUnstaked' //done//
 
 export const addEventListener = (program: anchor.Program<Defios>) => {
     program.addEventListener('NameRouterCreated', (res: INameRouterCreated) => {
