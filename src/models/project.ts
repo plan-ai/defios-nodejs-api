@@ -80,17 +80,17 @@ export const ProjectSchema = new mongoose.Schema<IProject>(
         is_token_native: {
             type: mongoose.Schema.Types.Boolean,
         },
-        internal_tags:{
-            type: mongoose.Schema.Types.Mixed
+        internal_tags: {
+            type: mongoose.Schema.Types.Mixed,
         },
-        coins_staked:{
+        coins_staked: {
             type: mongoose.Schema.Types.Number,
         },
-        coins_rewarded:{
+        coins_rewarded: {
             type: mongoose.Schema.Types.Number,
         },
         claimers_pending: {
-            type:[mongoose.Schema.Types.String]
+            type: [mongoose.Schema.Types.String],
         },
     },
     { versionKey: false }

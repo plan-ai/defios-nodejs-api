@@ -1,15 +1,14 @@
 import { IAddRoadmapData } from '../events'
 import { IIssuePRs, Issues, IIssue } from '../models/issues'
-import {Roadmap} from '../models/roadmap'
+import { Roadmap } from '../models/roadmap'
 import { DateTime } from 'luxon'
 
 export const addRoadmapData = async (commit: IAddRoadmapData) => {
     return new Promise(async (resolve, reject) => {
-
         const roadmap_obj = await Roadmap.findOne({
             roadmap_title: commit.roadmap_title.toString(),
         })
-        
+
         if (roadmap_obj) {
             //modify roadmap_obj
             roadmap_obj.roadmap_objectives_list.push({
