@@ -64,7 +64,7 @@ export const issueCreated = async (res: IIssueCreated) => {
                     ),
                 })
                 issue.save()
-                resolve(issue);
+                resolve(issue)
             })
             .catch((err) => {
                 reject(err)

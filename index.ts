@@ -10,11 +10,10 @@ import * as bs58 from 'bs58'
 import { PublicKey } from '@solana/web3.js'
 import { connectToDatabase } from './src/database'
 import { fetch } from 'node-fetch'
-import dotenv from 'dotenv';
-import findConfig from 'find-config';
+import dotenv from 'dotenv'
+import findConfig from 'find-config'
 
-dotenv.config({ path: findConfig('.env') });
-
+dotenv.config({ path: findConfig('.env') })
 
 const app: Express = express()
 const port = process.env.PORT
