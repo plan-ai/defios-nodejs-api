@@ -12,6 +12,16 @@ import { connectToDatabase } from './src/database'
 import { fetch } from 'node-fetch'
 import dotenv from 'dotenv'
 import findConfig from 'find-config'
+import {
+    ASSOCIATED_TOKEN_PROGRAM_ID,
+    createAssociatedTokenAccount,
+    createAssociatedTokenAccountInstruction,
+    createInitializeMintInstruction,
+    createMintToCheckedInstruction,
+    getAssociatedTokenAddress,
+    MintLayout,
+    TOKEN_PROGRAM_ID,
+} from '@solana/spl-token'
 
 dotenv.config({ path: findConfig('.env') })
 
@@ -37,6 +47,14 @@ const PROGRAM_ID = new web3.PublicKey(process.env.DEFIOS_PROGRAM_ID as string)
 let secretKey = bs58.decode(process.env.SOLANA_ACCOUNT_PRIVATE_KEY as string)
 let routerCreatorKeypair = web3.Keypair.fromSecretKey(secretKey)
 
+let b = bs58.decode(process.env.AUTH_KEY)
+let authSecretKey = new Uint8Array(
+    b.buffer,
+    b.byteOffset,
+    b.byteLength / Uint8Array.BYTES_PER_ELEMENT
+)
+let authKeyPair = web3.Keypair.fromSecretKey(authSecretKey)
+
 anchor.setProvider(anchor.AnchorProvider.env())
 
 const program = new anchor.Program(IDL, PROGRAM_ID) as Program<Defios>
@@ -44,6 +62,58 @@ const program = new anchor.Program(IDL, PROGRAM_ID) as Program<Defios>
 const {
     provider: { connection },
 } = program
+
+async function get_pda_from_seeds(seeds: any) {
+    return await web3.PublicKey.findProgramAddressSync(seeds, program.programId)
+}
+
+const createDefaultSchedule = async () => {
+    const [defaultVestingSchedule] = await get_pda_from_seeds([
+        Buffer.from('isGodReal?'),
+        Buffer.from('DoULoveMe?'),
+        Buffer.from('SweetChick'),
+    ])
+
+    await program.methods
+        .setDefaultSchedule(4, new anchor.BN(2500), new anchor.BN(1000))
+        .accounts({
+            authority: authKeyPair.publicKey,
+            defaultSchedule: defaultVestingSchedule,
+            systemProgram: web3.SystemProgram.programId,
+        })
+        .signers([authKeyPair])
+        .rpc({ skipPreflight: false })
+}
+
+const createCommunalAccount = async (mintKeypair: string) => {
+    let mintKeypairKey = new web3.PublicKey(mintKeypair)
+    const [communal_account] = await get_pda_from_seeds([
+        Buffer.from('are_we_conscious'),
+        Buffer.from('is love life ?  '),
+        Buffer.from('arewemadorinlove'),
+        mintKeypairKey.toBuffer(),
+    ])
+
+    const communalTokenAccount = await getAssociatedTokenAddress(
+        mintKeypairKey,
+        communal_account,
+        true
+    )
+
+    await program.methods
+        .createCommunalAccount()
+        .accounts({
+            authority: authKeyPair.publicKey,
+            communalDeposit: communal_account,
+            communalTokenAccount: communalTokenAccount,
+            systemProgram: web3.SystemProgram.programId,
+            rewardsMint: mintKeypair,
+            tokenProgram: TOKEN_PROGRAM_ID,
+            associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        })
+        .signers([authKeyPair])
+        .rpc({ skipPreflight: true })
+}
 
 const createNamesRouter = async (
     signingName: string,
@@ -71,7 +141,7 @@ const createNamesRouter = async (
             systemProgram: web3.SystemProgram.programId,
         })
         .signers([routerCreatorKeypair])
-        .rpc({ commitment: 'singleGossip' })
+        .rpc({ commitment: 'confirmed' })
 
     const {
         routerCreator,
@@ -150,17 +220,21 @@ const addUser = async (github_uid: string, user_public_key: string) => {
     if (data && data != undefined) {
         return { ...data, verifiedUserAccount: verifiedUserAccount }
     }
-    // Signature test
-    // await connection.confirmTransaction(
-    //   {
-    //     signature: await connection.requestAirdrop(
-    //       routerCreatorKeypair.publicKey,
-    //       web3.LAMPORTS_PER_SOL
-    //     ),
-    //     ...(await connection.getLatestBlockhash()),
-    //   },
-    //   'singleGossip'
-    // ).catch(() => { console.log("airdrop failed!") });
+    //Signature test
+    // await connection
+    //     .confirmTransaction(
+    //         {
+    //             signature: await connection.requestAirdrop(
+    //                 routerCreatorKeypair.publicKey,
+    //                 web3.LAMPORTS_PER_SOL
+    //             ),
+    //             ...(await connection.getLatestBlockhash()),
+    //         },
+    //         'confirmed'
+    //     )
+    //     .catch(() => {
+    //         console.log('airdrop failed!')
+    //     })
     const nameRouterAccount = await getNameRouterAccount()
 
     const message = Uint8Array.from(
@@ -195,7 +269,7 @@ const addUser = async (github_uid: string, user_public_key: string) => {
         })
         .signers([routerCreatorKeypair])
         .preInstructions([createED25519Ix])
-        .rpc({ commitment: 'singleGossip' })
+        .rpc({ commitment: 'confirmed' })
 
     const verifiedData = await program.account.verifiedUser.fetch(
         verifiedUserAccount
@@ -204,39 +278,6 @@ const addUser = async (github_uid: string, user_public_key: string) => {
         return { ...verifiedData, verifiedUserAccount: verifiedUserAccount }
     }
     return false
-}
-
-export const addUserClaimAccount = async (
-    username: string,
-    repositoryAccount: PublicKey,
-    amount: anchor.BN
-) => {
-    const nameRouterAccount = await getNameRouterAccount()
-    const [userClaimAccount] = await web3.PublicKey.findProgramAddress(
-        [
-            Buffer.from('user_claim'),
-            Buffer.from(username),
-            repositoryAccount.toBuffer(),
-            nameRouterAccount.toBuffer(),
-        ],
-        program.programId
-    )
-    await program.methods
-        .addUserClaim(username, amount)
-        .accounts({
-            nameRouterAccount,
-            repositoryAccount,
-            routerCreator: routerCreatorKeypair.publicKey,
-            userClaimAccount,
-            systemProgram: web3.SystemProgram.programId,
-        })
-        .signers([routerCreatorKeypair])
-        .rpc()
-        .catch((err) => {
-            console.log(err)
-        })
-
-    console.log(userClaimAccount, username)
 }
 
 app.get('/namesrouter', async (req: Request, res: Response) => {
@@ -292,6 +333,16 @@ app.post('/createUserMapping', async (req: Request, res: Response) => {
 
 app.get('/', async (req: Request, res: Response) => {
     res.send('Express + TypeScript Server')
+})
+
+app.post('/createDefaultSchedule', async (req: Request, res: Response) => {
+    createDefaultSchedule()
+    res.send('Default Schedule Created')
+})
+
+app.post('/createCommunalAccount', async (req: Request, res: Response) => {
+    createCommunalAccount(req.body.mintKeypair)
+    res.send('Communal account created')
 })
 
 app.listen(port, async () => {
