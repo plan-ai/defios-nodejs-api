@@ -9,7 +9,7 @@ import { addEventListener } from './src/listeners'
 import * as bs58 from 'bs58'
 import { PublicKey } from '@solana/web3.js'
 import { connectToDatabase } from './src/database'
-import { fetch } from 'node-fetch'
+import fetch from 'node-fetch'
 import dotenv from 'dotenv'
 import findConfig from 'find-config'
 import {
