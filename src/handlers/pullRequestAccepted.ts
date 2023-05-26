@@ -7,7 +7,7 @@ export const pullRequestAccepted = async (res: IPullRequestAccepted) => {
     return new Promise(async (resolve, reject) => {
         try {
             const user = await User.findOne({
-                user_phantom_address: res.pull_request_addr.toString(),
+                user_phantom_address: res.pullRequestAddr.toString(),
             })
             if (!user) {
                 reject('User not found')
@@ -34,7 +34,7 @@ export const pullRequestAccepted = async (res: IPullRequestAccepted) => {
             if (issue) {
                 issue.updateOne({
                     issue_state: 'closed',
-                    rewardee: res.pull_request_addr,
+                    rewardee: res.pullRequestAddr,
                 })
                 issue.save()
                 resolve('Pull Request Accepted/Merged Successfully')

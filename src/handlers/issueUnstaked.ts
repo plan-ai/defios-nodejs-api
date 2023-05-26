@@ -6,14 +6,14 @@ export const issueUnstaked = async (res: IIssueUnstaked) => {
     return new Promise(async (resolve, reject) => {
         try {
             const user = await User.findOne({
-                user_phantom_address: res.issue_staker.toString(),
+                user_phantom_address: res.issueStaker.toString(),
             })
             if (!user) {
                 reject('User not found')
                 return
             }
             const issue = await Issues.findOne({
-                issue_account: res.issue_account.toString(),
+                issue_account: res.issueAccount.toString(),
             })
             if (!issue) {
                 reject('issue not found')
@@ -22,14 +22,14 @@ export const issueUnstaked = async (res: IIssueUnstaked) => {
             issue.updateOne({
                 issue_stake_amount:
                     parseInt(issue.issue_stake_amount.toString()) -
-                    parseInt(res.unstaked_amount.toString()),
+                    parseInt(res.unstakedAmount.toString()),
             })
             issue.save()
             const contribution = new Contribution({
                 contributor_github: user.user_github,
-                contribution_link: res.issue_contribution_link,
+                contribution_link: res.issueContributionLink,
                 contribution_timestamp: new Date(),
-                contribution_amt: res.unstaked_amount.toString(),
+                contribution_amt: res.unstakedAmount.toString(),
                 contribution_token_symbol: issue.issue_stake_token_symbol,
                 contribution_token_url: issue.issue_stake_token_url,
                 contribution_type: 'inbound',
