@@ -44,17 +44,9 @@ const { web3 } = anchor
 
 const PROGRAM_ID = new web3.PublicKey(process.env.DEFIOS_PROGRAM_ID as string)
 
-let secretKey = bs58.decode(process.env.SOLANA_ACCOUNT_PRIVATE_KEY as string)
-let routerCreatorKeypair = web3.Keypair.fromSecretKey(secretKey)
-
-let b = bs58.decode(process.env.AUTH_KEY)
-let authSecretKey = new Uint8Array(
-    b.buffer,
-    b.byteOffset,
-    b.byteLength / Uint8Array.BYTES_PER_ELEMENT
-)
+let authSecretKey = bs58.decode(process.env.AUTH_KEY as string)
 let authKeyPair = web3.Keypair.fromSecretKey(authSecretKey)
-
+console.log(`Authorised creator: ${authKeyPair.publicKey.toString()}`)
 anchor.setProvider(anchor.AnchorProvider.env())
 
 const program = new anchor.Program(IDL, PROGRAM_ID) as Program<Defios>
@@ -119,29 +111,18 @@ const createNamesRouter = async (
     signingName: string,
     signatureVersion: number
 ) => {
-    console.log(`Router creator: ${routerCreatorKeypair.publicKey.toString()}`)
-
-    // await connection.confirmTransaction(
-    //   {
-    //     signature: await connection.requestAirdrop(
-    //       routerCreatorKeypair.publicKey,
-    //       web3.LAMPORTS_PER_SOL
-    //     ),
-    //     ...(await connection.getLatestBlockhash()),
-    //   },
-    //   'singleGossip'
-    // ).catch(() => { console.log("airdrop failed!") });
+    console.log(`Router creator: ${authKeyPair.publicKey.toString()}`)
 
     const nameRouterAccount = await getNameRouterAccount()
     await program.methods
         .createNameRouter(signingName, signatureVersion)
         .accounts({
             nameRouterAccount,
-            routerCreator: routerCreatorKeypair.publicKey,
+            routerCreator: authKeyPair.publicKey,
             systemProgram: web3.SystemProgram.programId,
         })
-        .signers([routerCreatorKeypair])
-        .rpc({ commitment: 'confirmed' })
+        .signers([authKeyPair])
+        .rpc({ commitment: 'processed' })
 
     const {
         routerCreator,
@@ -167,7 +148,7 @@ const getNameRouterAccount = async () => {
         [
             Buffer.from(signingName),
             Buffer.from(signatureVersion.toString()),
-            routerCreatorKeypair.publicKey.toBuffer(),
+            authKeyPair.publicKey.toBuffer(),
         ],
         PROGRAM_ID
     )
@@ -220,21 +201,7 @@ const addUser = async (github_uid: string, user_public_key: string) => {
     if (data && data != undefined) {
         return { ...data, verifiedUserAccount: verifiedUserAccount }
     }
-    //Signature test
-    // await connection
-    //     .confirmTransaction(
-    //         {
-    //             signature: await connection.requestAirdrop(
-    //                 routerCreatorKeypair.publicKey,
-    //                 web3.LAMPORTS_PER_SOL
-    //             ),
-    //             ...(await connection.getLatestBlockhash()),
-    //         },
-    //         'confirmed'
-    //     )
-    //     .catch(() => {
-    //         console.log('airdrop failed!')
-    //     })
+
     const nameRouterAccount = await getNameRouterAccount()
 
     const message = Uint8Array.from(
@@ -243,12 +210,12 @@ const addUser = async (github_uid: string, user_public_key: string) => {
 
     const signature = await ed.sign(
         message,
-        routerCreatorKeypair.secretKey.slice(0, 32)
+        authKeyPair.secretKey.slice(0, 32)
     )
 
     const createED25519Ix = web3.Ed25519Program.createInstructionWithPublicKey({
         message: message,
-        publicKey: routerCreatorKeypair.publicKey.toBytes(),
+        publicKey: authKeyPair.publicKey.toBytes(),
         signature,
     })
 
@@ -263,13 +230,13 @@ const addUser = async (github_uid: string, user_public_key: string) => {
         .accounts({
             nameRouterAccount,
             verifiedUserAccount,
-            routerCreator: routerCreatorKeypair.publicKey,
+            routerCreator: authKeyPair.publicKey,
             sysvarInstructions: web3.SYSVAR_INSTRUCTIONS_PUBKEY,
             systemProgram: web3.SystemProgram.programId,
         })
-        .signers([routerCreatorKeypair])
+        .signers([authKeyPair])
         .preInstructions([createED25519Ix])
-        .rpc({ commitment: 'confirmed' })
+        .rpc({ commitment: 'processed' })
 
     const verifiedData = await program.account.verifiedUser.fetch(
         verifiedUserAccount
@@ -336,12 +303,12 @@ app.get('/', async (req: Request, res: Response) => {
 })
 
 app.post('/createDefaultSchedule', async (req: Request, res: Response) => {
-    createDefaultSchedule()
+    await createDefaultSchedule()
     res.send('Default Schedule Created')
 })
 
 app.post('/createCommunalAccount', async (req: Request, res: Response) => {
-    createCommunalAccount(req.body.mintKeypair)
+    await createCommunalAccount(req.body.mintKeypair)
     res.send('Communal account created')
 })
 
