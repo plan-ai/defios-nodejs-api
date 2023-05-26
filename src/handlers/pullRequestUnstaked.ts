@@ -6,14 +6,14 @@ export const pullRequestUnstaked = async (res: IPullRequestUnstaked) => {
     return new Promise(async (resolve, reject) => {
         try {
             const user = await User.findOne({
-                user_phantom_address: res.pr_staker.toString(),
+                user_phantom_address: res.prStaker.toString(),
             })
             if (!user) {
                 reject('User not found')
                 return
             }
             const issue = await Issues.findOne({
-                'issue_prs.issue_pr_account': res.pr_account,
+                'issue_prs.issue_pr_account': res.prAccount,
             })
             if (!issue) {
                 reject('issue not found')
@@ -22,13 +22,13 @@ export const pullRequestUnstaked = async (res: IPullRequestUnstaked) => {
             const updatedPR = issue.issue_prs.map((item) => {
                 if (
                     item.issue_pr_account.toString() !==
-                    res.pr_account.toString()
+                    res.prAccount.toString()
                 ) {
                     return item
                 } else {
                     item.issue_vote_amount =
                         parseInt(item.issue_vote_amount.toString()) -
-                        parseInt(res.staked_amount.toString())
+                        parseInt(res.stakedAmount.toString())
                     return item
                 }
             })
@@ -36,9 +36,9 @@ export const pullRequestUnstaked = async (res: IPullRequestUnstaked) => {
             issue.save()
             const contribution = new Contribution({
                 contributor_github: user.user_github,
-                contribution_link: res.pr_contribution_link,
+                contribution_link: res.prContributionLink,
                 contribution_timestamp: new Date(),
-                contribution_amt: res.staked_amount.toString(),
+                contribution_amt: res.stakedAmount.toString(),
                 contribution_token_symbol: issue.issue_stake_token_symbol,
                 contribution_token_url: issue.issue_stake_token_url,
                 contribution_type: 'inbound',

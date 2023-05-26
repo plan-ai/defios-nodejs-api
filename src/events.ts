@@ -2,11 +2,11 @@ import { PublicKey } from '@solana/web3.js'
 import { BN } from '@project-serum/anchor'
 
 export interface IPullRequestSent {
-    sent_by: PublicKey
+    sentBy: PublicKey
     commits: Array<PublicKey>
-    metadata_uri: String
+    metadataUri: String
     issue: PublicKey
-    pull_request: PublicKey
+    pullRequest: PublicKey
 }
 
 export interface IAddCommitToPR {
@@ -15,8 +15,8 @@ export interface IAddCommitToPR {
 }
 
 export interface IAddChildObjective {
-    parent_account: PublicKey
-    added_by: PublicKey
+    parentAccount: PublicKey
+    addedBy: PublicKey
 }
 
 export interface IAddObjectiveDataEvent {
@@ -35,104 +35,104 @@ export interface IAddObjectiveDataEvent {
 }
 
 export interface IAddRoadmapDataEvent {
-    roadmap_title: String
-    roadmap_description_link: String
-    roadmap_creation_unix: number
-    roadmap_creator: PublicKey
+    roadmapTitle: String
+    roadmapDescriptionLink: String
+    roadmapCreationUnix: number
+    roadmapCreator: PublicKey
 }
 export interface INameRouterCreated {
-    router_creator: PublicKey
-    name_router_account: PublicKey
+    routerCreator: PublicKey
+    nameRouterAccount: PublicKey
 }
 
 export interface IVerifiedUserAdded {
-    router_creator: PublicKey
-    name_router_account: PublicKey
-    verified_user_account: PublicKey
-    user_name: String
+    routerCreator: PublicKey
+    nameRouterAccount: PublicKey
+    verifiedUserAccount: PublicKey
+    userName: String
 }
 
 export interface ICommitAdded {
-    commit_creator: PublicKey
-    commit_account: PublicKey
-    issue_account: PublicKey
-    metadata_uri: String
+    commitCreator: PublicKey
+    commitAccount: PublicKey
+    issueAccount: PublicKey
+    metadataUri: String
 }
 
 export interface IIssueCreated {
-    issue_creator: PublicKey
-    issue_account: PublicKey
-    repository_account: PublicKey
-    issue_token_pool_account: PublicKey
-    rewards_mint: PublicKey
+    issueCreator: PublicKey
+    issueAccount: PublicKey
+    repositoryAccount: PublicKey
+    issueTokenPoolAccount: PublicKey
+    rewardsMint: PublicKey
     uri: String
 }
 
 export interface IRepositoryCreated {
-    repository_creator: PublicKey
-    repository_account: PublicKey
-    rewards_mint?: PublicKey
+    repositoryCreator: PublicKey
+    repositoryAccount: PublicKey
+    rewardsMint?: PublicKey
     uri: String
     name: String
     description: String
-    token_name?: String
-    token_image?: String
-    token_metadata_uri?: String
+    tokenName?: String
+    tokenImage?: String
+    tokenMetadataUri?: String
 }
 
 export interface IIssueStaked {
-    issue_staker: PublicKey
-    issue_staker_token_account: PublicKey
-    issue_account: PublicKey
-    staked_amount: number
-    rewards_mint: PublicKey
-    issue_contribution_link: String
+    issueStaker: PublicKey
+    issueStakerTokenAccount: PublicKey
+    issueAccount: PublicKey
+    stakedAmount: number
+    rewardsMint: PublicKey
+    issueContributionLink: String
 }
 
 export interface IIssueUnstaked {
-    issue_staker: PublicKey
-    issue_staker_token_account: PublicKey
-    issue_account: PublicKey
-    unstaked_amount: number
-    rewards_mint: PublicKey
-    issue_contribution_link: String
+    issueStaker: PublicKey
+    issueStakerTokenAccount: PublicKey
+    issueAccount: PublicKey
+    unstakedAmount: number
+    rewardsMint: PublicKey
+    issueContributionLink: String
 }
 
 export interface IPullRequestAccepted {
-    pull_request_addr: PublicKey
+    pullRequestAddr: PublicKey
     repository: PublicKey
-    repository_name: String
+    repositoryName: String
     issue: PublicKey
-    repository_creator: PublicKey
+    repositoryCreator: PublicKey
 }
 
 export interface IVestingScheduleChanged {
-    repository_account: PublicKey
-    repository_creator: PublicKey
-    old_vesting_schedule: Array<String>
-    new_vesting_schedule: Array<String>
+    repositoryAccount: PublicKey
+    repositoryCreator: PublicKey
+    oldVestingSchedule: Array<String>
+    newVestingSchedule: Array<String>
 }
 
 export interface IDefaultVestingScheduleChanged {
-    number_of_schedules: number
-    per_vesting_amount: number
-    unix_change: number
+    numberOfSchedules: number
+    perVestingAmount: number
+    unixChange: number
 }
 
 export interface IPullRequestStaked {
-    pr_staker: PublicKey
-    pr_staker_token_account: PublicKey
-    pr_account: PublicKey
-    staked_amount: number
-    rewards_mint: PublicKey
-    pr_contribution_link: String
+    prStaker: PublicKey
+    prStakerTokenAccount: PublicKey
+    prAccount: PublicKey
+    stakedAmount: number
+    rewardsMint: PublicKey
+    prContributionLink: String
 }
 
 export interface IPullRequestUnstaked {
-    pr_staker: PublicKey
-    pr_staker_token_account: PublicKey
-    pr_account: PublicKey
-    staked_amount: number
-    rewards_mint: PublicKey
-    pr_contribution_link: String
+    prStaker: PublicKey
+    prStakerTokenAccount: PublicKey
+    prAccount: PublicKey
+    stakedAmount: number
+    rewardsMint: PublicKey
+    prContributionLink: String
 }

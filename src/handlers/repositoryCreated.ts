@@ -8,25 +8,25 @@ export const repositoryCreated = async (res: IRepositoryCreated) => {
     return new Promise(async (resolve, reject) => {
         try {
             axios
-                .get(res.token_metadata_uri.toString())
+                .get(res.tokenMetadataUri.toString())
                 .then(async (response) => {
-                    const tokenAddress = res.rewards_mint
+                    const tokenAddress = res.rewardsMint
                     const token = new Token({
                         token_spl_addr: tokenAddress.toBase58(),
                         token_symbol: response.data.symbol,
-                        token_name: res.token_name,
-                        token_image_url: res.token_image,
+                        token_name: res.tokenName,
+                        token_image_url: res.tokenImage,
                     })
                     token.save()
                     const user = await User.findOne({
-                        user_phantom_address: res.repository_creator.toString(),
+                        user_phantom_address: res.repositoryCreator.toString(),
                     })
                     if (!user) {
                         reject('User not found')
                         return
                     }
                     const project = new Project({
-                        project_account: res.repository_account.toString(),
+                        project_account: res.repositoryAccount.toString(),
                         project_name: res.name,
                         num_contributions: 0,
                         num_contributions_chg_perc: 0,

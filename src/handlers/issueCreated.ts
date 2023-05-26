@@ -12,21 +12,21 @@ console.log(github_token)
 export const issueCreated = async (res: IIssueCreated) => {
     return new Promise(async (resolve, reject) => {
         const user = await User.findOne({
-            user_phantom_address: res.issue_creator.toString(),
+            user_phantom_address: res.issueCreator.toString(),
         })
         if (!user) {
             reject('User not found')
             return
         }
         const token = await Token.findOne({
-            token_spl_addr: res.rewards_mint.toString(),
+            token_spl_addr: res.rewardsMint.toString(),
         })
         if (!token) {
             reject('Token not found')
             return
         }
         const project = await Project.findOne({
-            project_account: res.repository_account.toString(),
+            project_account: res.repositoryAccount.toString(),
         })
         if (!project) {
             reject('Project not found')
@@ -47,9 +47,9 @@ export const issueCreated = async (res: IIssueCreated) => {
         axios(config)
             .then((data) => {
                 const issue = new Issues({
-                    issue_account: res.issue_account.toString(),
+                    issue_account: res.issueAccount.toString(),
                     issue_creator_gh: user.user_github,
-                    issue_project_id: res.repository_account.toString(),
+                    issue_project_id: res.repositoryAccount.toString(),
                     issue_project_name: project.project_name,
                     issue_title: data.data.title,
                     issue_state: 'open',
@@ -57,7 +57,7 @@ export const issueCreated = async (res: IIssueCreated) => {
                     issue_gh_url: res.uri,
                     issue_stake_amount: 0,
                     issue_stake_token_symbol: token.token_symbol,
-                    issue_stake_token_url: res.rewards_mint.toString(),
+                    issue_stake_token_url: res.rewardsMint.toString(),
                     issue_prs: [],
                     issue_tags: data.data.labels.map(
                         (label: any) => label.name

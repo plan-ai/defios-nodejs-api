@@ -5,10 +5,10 @@ export const addVerifiedUser = async (user: IVerifiedUserAdded) => {
     return new Promise(async (resolve, reject) => {
         try {
             const verifiedUser = await User.findOne({
-                user_github: user.user_name,
+                user_github: user.userName,
             })
             verifiedUser.updateOne({
-                user_phantom_address: user.verified_user_account.toString(),
+                user_phantom_address: user.verifiedUserAccount.toString(),
             })
             verifiedUser.save()
             resolve(verifiedUser)
