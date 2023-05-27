@@ -7,15 +7,18 @@ import axios from 'axios'
 export const repositoryCreated = async (res: IRepositoryCreated) => {
     return new Promise(async (resolve, reject) => {
         try {
+            let new_metadata_uri = res.tokenMetadataUri
+                .toString()
+                .replace('gateway.pinata.cloud', 'ipfs.io')
             axios
-                .get(res.tokenMetadataUri.toString())
+                .get(new_metadata_uri)
                 .then(async (response) => {
                     const tokenAddress = res.rewardsMint
                     const token = new Token({
                         token_spl_addr: tokenAddress.toBase58(),
                         token_symbol: response.data.symbol,
                         token_name: res.tokenName,
-                        token_image_url: res.tokenImage,
+                        token_image_url: res.tokenSymbol,
                     })
                     token.save()
                     const user = await User.findOne({
