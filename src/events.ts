@@ -76,7 +76,7 @@ export interface IRepositoryCreated {
     name: String
     description: String
     tokenName?: String
-    tokenImage?: String
+    tokenSymbol?: String
     tokenMetadataUri?: String
 }
 

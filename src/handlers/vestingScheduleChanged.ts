@@ -13,8 +13,7 @@ export const vestingScheduleChanged = async (
         if (token_obj) {
             //modify the token object
             token_obj.token_creator_name = commit.repositoryCreator.toString()
-            token_obj.token_repository_url =
-                commit.repositoryAccount.toString()
+            token_obj.token_repository_url = commit.repositoryAccount.toString()
 
             token_obj.newVestingScheduke =
                 commit.new_vesting_schedule.toString()

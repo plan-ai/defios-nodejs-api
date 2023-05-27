@@ -76,7 +76,7 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
     program.addEventListener('RepositoryCreated', (res: IRepositoryCreated) => {
         repositoryCreated(res)
             .then(() => {
-                console.log('IssueCreated')
+                console.log('Repository Created')
             })
             .catch((e) => {
                 console.log('Error Adding Repo: ', e)

@@ -22,7 +22,6 @@ import {
     MintLayout,
     TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
-
 dotenv.config({ path: findConfig('.env') })
 
 const app: Express = express()
@@ -50,7 +49,6 @@ console.log(`Authorised creator: ${authKeyPair.publicKey.toString()}`)
 anchor.setProvider(anchor.AnchorProvider.env())
 
 const program = new anchor.Program(IDL, PROGRAM_ID) as Program<Defios>
-
 const {
     provider: { connection },
 } = program
@@ -142,7 +140,7 @@ const createNamesRouter = async (
 }
 
 const getNameRouterAccount = async () => {
-    const signatureVersion = 1
+    const signatureVersion = 3
     const signingName = 'defios.com'
     const [nameRouterAccount] = await web3.PublicKey.findProgramAddress(
         [
@@ -208,10 +206,7 @@ const addUser = async (github_uid: string, user_public_key: string) => {
         Buffer.from(`DefiOS(${userName}, ${userPubkey.toString()})`)
     )
 
-    const signature = await ed.sign(
-        message,
-        authKeyPair.secretKey.slice(0, 32)
-    )
+    const signature = await ed.sign(message, authKeyPair.secretKey.slice(0, 32))
 
     const createED25519Ix = web3.Ed25519Program.createInstructionWithPublicKey({
         message: message,
@@ -252,7 +247,7 @@ app.get('/namesrouter', async (req: Request, res: Response) => {
     if (checkIfAvailable) {
         res.send(checkIfAvailable)
     } else {
-        await createNamesRouter('defios.com', 1)
+        await createNamesRouter('defios.com', 3)
         res.send('Created Names router.')
     }
 })
