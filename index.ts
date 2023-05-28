@@ -65,7 +65,11 @@ const createDefaultSchedule = async () => {
     ])
 
     await program.methods
-        .setDefaultSchedule(4, new anchor.BN(2500*(10**9)), new anchor.BN(10**7))
+        .setDefaultSchedule(
+            4,
+            new anchor.BN(2500 * 10 ** 9),
+            new anchor.BN(10 ** 7)
+        )
         .accounts({
             authority: authKeyPair.publicKey,
             defaultSchedule: defaultVestingSchedule,
@@ -74,7 +78,6 @@ const createDefaultSchedule = async () => {
         .signers([authKeyPair])
         .rpc({ skipPreflight: false })
 }
-
 const createCommunalAccount = async (mintKeypair: string) => {
     let mintKeypairKey = new web3.PublicKey(mintKeypair)
     const [communal_account] = await get_pda_from_seeds([
@@ -111,7 +114,10 @@ const createNamesRouter = async (
 ) => {
     console.log(`Router creator: ${authKeyPair.publicKey.toString()}`)
 
-    const nameRouterAccount = await getNameRouterAccount(signingName,signatureVersion)
+    const nameRouterAccount = await getNameRouterAccount(
+        signingName,
+        signatureVersion
+    )
     await program.methods
         .createNameRouter(signingName, signatureVersion)
         .accounts({
@@ -139,7 +145,10 @@ const createNamesRouter = async (
     )
 }
 
-const getNameRouterAccount = async (signingName:string,signatureVersion:number) => {
+const getNameRouterAccount = async (
+    signingName: string,
+    signatureVersion: number
+) => {
     const [nameRouterAccount] = await web3.PublicKey.findProgramAddress(
         [
             Buffer.from(signingName),
@@ -155,7 +164,7 @@ const getVerifiedUserAccount = async (
     userName: string,
     userPubkey: PublicKey
 ) => {
-    const nameRouterAccount = await getNameRouterAccount()
+    const nameRouterAccount = await getNameRouterAccount('defios.com', 1)
     const [verifiedUserAccount] = await web3.PublicKey.findProgramAddress(
         [
             Buffer.from(userName),
@@ -168,7 +177,7 @@ const getVerifiedUserAccount = async (
 }
 
 const checkRouter = async () => {
-    const nameRouterAccount = await getNameRouterAccount()
+    const nameRouterAccount = await getNameRouterAccount('defios.com', 1)
     const data = await program.account.nameRouter
         .fetch(nameRouterAccount)
         .catch(() => {
@@ -198,7 +207,7 @@ const addUser = async (github_uid: string, user_public_key: string) => {
         return { ...data, verifiedUserAccount: verifiedUserAccount }
     }
 
-    const nameRouterAccount = await getNameRouterAccount()
+    const nameRouterAccount = await getNameRouterAccount('defios.com', 1)
 
     const message = Uint8Array.from(
         Buffer.from(`DefiOS(${userName}, ${userPubkey.toString()})`)

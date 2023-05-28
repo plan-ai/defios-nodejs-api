@@ -14,10 +14,12 @@ export const pullRequestSent = async (res: IPullRequestSent) => {
             })
             var config = {
                 method: 'get',
-                url: res.metadataUri.replace(
-                    'https://github.com/',
-                    'https://api.github.com/repos/'
-                ).replace('/pull/', '/pulls/'),
+                url: res.metadataUri
+                    .replace(
+                        'https://github.com/',
+                        'https://api.github.com/repos/'
+                    )
+                    .replace('/pull/', '/pulls/'),
                 headers: {
                     Authorization: 'Bearer ' + github_token,
                     'Content-Type': 'application/json',

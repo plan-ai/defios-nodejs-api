@@ -49,7 +49,7 @@ export interface IVerifiedUserAdded {
     routerCreator: PublicKey
     nameRouterAccount: PublicKey
     verifiedUserAccount: PublicKey
-    userName: String,
+    userName: String
     userPubkey: PublicKey
 }
 
