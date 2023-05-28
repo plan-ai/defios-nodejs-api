@@ -16,9 +16,9 @@ export const repositoryCreated = async (res: IRepositoryCreated) => {
                     const tokenAddress = res.rewardsMint
                     const token = new Token({
                         token_spl_addr: tokenAddress.toBase58(),
-                        token_symbol: response.data.symbol,
+                        token_symbol: res.tokenSymbol,
                         token_name: res.tokenName,
-                        token_image_url: res.tokenSymbol,
+                        token_image_url: response.data.image,
                     })
                     token.save()
                     const user = await User.findOne({

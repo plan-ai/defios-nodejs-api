@@ -6,6 +6,7 @@ import { User } from '../models/users'
 export const pullRequestAccepted = async (res: IPullRequestAccepted) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(res.pullRequestAddr.toString())
             const user = await User.findOne({
                 user_phantom_address: res.pullRequestAddr.toString(),
             })

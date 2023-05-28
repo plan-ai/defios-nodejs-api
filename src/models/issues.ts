@@ -25,6 +25,7 @@ export interface IIssuePRs {
     issue_author_github: string
     issue_title: string
     issue_vote_amount: number
+    issue_pr_github: string
 }
 
 export const IssuePRsSchema = new mongoose.Schema<IIssuePRs>(
@@ -49,6 +50,9 @@ export const IssuePRsSchema = new mongoose.Schema<IIssuePRs>(
         },
         issue_vote_amount: {
             type: mongoose.Schema.Types.Number,
+        },
+        issue_pr_github: {
+            type: mongoose.Schema.Types.String,
         },
     },
     { versionKey: false, _id: false }

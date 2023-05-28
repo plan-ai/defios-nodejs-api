@@ -1,6 +1,6 @@
 import { IPullRequestStaked } from '../events'
 import { Issues } from '../models/issues'
-import { Contribution, User } from '../models/users'
+import { User } from '../models/users'
 
 export const pullRequestStaked = async (res: IPullRequestStaked) => {
     return new Promise(async (resolve, reject) => {
@@ -27,23 +27,23 @@ export const pullRequestStaked = async (res: IPullRequestStaked) => {
                     return item
                 } else {
                     item.issue_vote_amount =
-                        parseInt(res.stakedAmount.toString()) +
-                        parseInt(item.issue_vote_amount.toString())
+                        res.stakedAmount.toNumber() + item.issue_vote_amount
                     return item
                 }
             })
             issue.issue_prs = updatedPR
             issue.save()
-            const contribution = new Contribution({
+            user.user_contributions.push({
                 contributor_github: user.user_github,
                 contribution_link: res.prContributionLink,
                 contribution_timestamp: new Date(),
-                contribution_amt: res.stakedAmount.toString(),
+                contribution_amt: res.stakedAmount.toNumber(),
                 contribution_token_symbol: issue.issue_stake_token_symbol,
                 contribution_token_url: issue.issue_stake_token_url,
                 contribution_type: 'outbound',
+                contributor_project_id: issue.issue_project_id,
+                contributor_project_name: issue.issue_project_name,
             })
-            user.user_contributions.push(contribution)
             user.save()
             resolve('Staked on PR Successfully')
         } catch (err) {

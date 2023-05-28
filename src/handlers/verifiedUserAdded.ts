@@ -11,7 +11,7 @@ export const addVerifiedUser = async (user: IVerifiedUserAdded) => {
             })
             console.log(verifiedUser)
             verifiedUser.updateOne({
-                user_phantom_address: user.verifiedUserAccount.toString(),
+                user_phantom_address: user.userPubkey.toString(),
             })
             verifiedUser.save()
             resolve(verifiedUser)

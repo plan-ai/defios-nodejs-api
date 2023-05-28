@@ -48,7 +48,7 @@ export const ContributionSchema = new mongoose.Schema<IContribution>(
             type: mongoose.Schema.Types.String,
         },
     },
-    { versionKey: false }
+    { versionKey: false, _id: false }
 )
 
 export interface IProgressItem {
@@ -117,7 +117,3 @@ export const UserSchema = new mongoose.Schema<IUser>(
 )
 
 export const User = mongoose.model<IUser>('Users', UserSchema)
-export const Contribution = mongoose.model<IContribution>(
-    'Contributions',
-    ContributionSchema
-)

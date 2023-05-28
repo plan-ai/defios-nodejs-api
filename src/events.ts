@@ -49,7 +49,8 @@ export interface IVerifiedUserAdded {
     routerCreator: PublicKey
     nameRouterAccount: PublicKey
     verifiedUserAccount: PublicKey
-    userName: String
+    userName: String,
+    userPubkey: PublicKey
 }
 
 export interface ICommitAdded {
@@ -84,7 +85,7 @@ export interface IIssueStaked {
     issueStaker: PublicKey
     issueStakerTokenAccount: PublicKey
     issueAccount: PublicKey
-    stakedAmount: number
+    stakedAmount: BN
     rewardsMint: PublicKey
     issueContributionLink: String
 }
@@ -93,7 +94,7 @@ export interface IIssueUnstaked {
     issueStaker: PublicKey
     issueStakerTokenAccount: PublicKey
     issueAccount: PublicKey
-    unstakedAmount: number
+    unstakedAmount: BN
     rewardsMint: PublicKey
     issueContributionLink: String
 }
@@ -123,7 +124,7 @@ export interface IPullRequestStaked {
     prStaker: PublicKey
     prStakerTokenAccount: PublicKey
     prAccount: PublicKey
-    stakedAmount: number
+    stakedAmount: BN
     rewardsMint: PublicKey
     prContributionLink: String
 }
@@ -132,7 +133,7 @@ export interface IPullRequestUnstaked {
     prStaker: PublicKey
     prStakerTokenAccount: PublicKey
     prAccount: PublicKey
-    stakedAmount: number
+    stakedAmount: BN
     rewardsMint: PublicKey
     prContributionLink: String
 }
