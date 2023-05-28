@@ -65,7 +65,7 @@ const createDefaultSchedule = async () => {
     ])
 
     await program.methods
-        .setDefaultSchedule(4, new anchor.BN(2500), new anchor.BN(1000))
+        .setDefaultSchedule(4, new anchor.BN(2500*(10**9)), new anchor.BN(10**7))
         .accounts({
             authority: authKeyPair.publicKey,
             defaultSchedule: defaultVestingSchedule,
@@ -111,7 +111,7 @@ const createNamesRouter = async (
 ) => {
     console.log(`Router creator: ${authKeyPair.publicKey.toString()}`)
 
-    const nameRouterAccount = await getNameRouterAccount()
+    const nameRouterAccount = await getNameRouterAccount(signingName,signatureVersion)
     await program.methods
         .createNameRouter(signingName, signatureVersion)
         .accounts({
@@ -139,9 +139,7 @@ const createNamesRouter = async (
     )
 }
 
-const getNameRouterAccount = async () => {
-    const signatureVersion = 3
-    const signingName = 'defios.com'
+const getNameRouterAccount = async (signingName:string,signatureVersion:number) => {
     const [nameRouterAccount] = await web3.PublicKey.findProgramAddress(
         [
             Buffer.from(signingName),
@@ -247,7 +245,7 @@ app.get('/namesrouter', async (req: Request, res: Response) => {
     if (checkIfAvailable) {
         res.send(checkIfAvailable)
     } else {
-        await createNamesRouter('defios.com', 3)
+        await createNamesRouter('defios.com', 1)
         res.send('Created Names router.')
     }
 })
