@@ -1,6 +1,6 @@
 import { IIssueUnstaked } from '../events'
 import { Issues } from '../models/issues'
-import { Contribution, User } from '../models/users'
+import { User } from '../models/users'
 
 export const issueUnstaked = async (res: IIssueUnstaked) => {
     return new Promise(async (resolve, reject) => {
@@ -19,22 +19,20 @@ export const issueUnstaked = async (res: IIssueUnstaked) => {
                 reject('issue not found')
                 return
             }
-            issue.updateOne({
-                issue_stake_amount:
-                    parseInt(issue.issue_stake_amount.toString()) -
-                    parseInt(res.unstakedAmount.toString()),
-            })
+            issue.issue_stake_amount =
+                issue.issue_stake_amount - res.unstakedAmount.toNumber()
             issue.save()
-            const contribution = new Contribution({
+            user.user_contributions.push({
                 contributor_github: user.user_github,
                 contribution_link: res.issueContributionLink,
                 contribution_timestamp: new Date(),
-                contribution_amt: res.unstakedAmount.toString(),
+                contribution_amt: res.unstakedAmount.toNumber(),
                 contribution_token_symbol: issue.issue_stake_token_symbol,
                 contribution_token_url: issue.issue_stake_token_url,
                 contribution_type: 'inbound',
+                contributor_project_id: issue.issue_project_id,
+                contributor_project_name: issue.issue_project_name,
             })
-            user.user_contributions.push(contribution)
             user.save()
             resolve('Unstaked Successfully')
         } catch (err) {
