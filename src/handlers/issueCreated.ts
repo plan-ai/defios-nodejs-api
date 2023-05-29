@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IIssueCreated } from '../events'
 import { Issues } from '../models/issues'
-import { Project } from '../models/project'
+import { Project, ProjectSchema } from '../models/project'
 import { Token } from '../models/token'
 import { User } from '../models/users'
 const config = require('config')
@@ -64,6 +64,11 @@ export const issueCreated = async (res: IIssueCreated) => {
                     ),
                 })
                 issue.save()
+                Project.findOneAndUpdate(
+                    { project_account: res.repositoryAccount.toString() },
+                    { $inc: { num_open_issues: 1 } },
+                    { new: true }
+                )
                 resolve(issue)
             })
             .catch((err) => {

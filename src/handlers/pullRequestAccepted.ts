@@ -28,16 +28,21 @@ export const pullRequestAccepted = async (res: IPullRequestAccepted) => {
                 reject('Issue not found')
                 return
             }
-            if (issue.issue_project_id.toString() !== res.issue.toString()) {
+            if (
+                issue.issue_project_id.toString() !== res.repository.toString()
+            ) {
                 reject('Issue does not belong to the Repository')
                 return
             }
             if (issue) {
-                issue.updateOne({
-                    issue_state: 'closed',
-                    rewardee: res.pullRequestAddr,
-                })
+                issue.issue_state = 'closed'
+                issue.rewardee = res.pullRequestAddr.toString()
                 issue.save()
+                Project.findOneAndUpdate(
+                    { project_account: res.repository.toString() },
+                    { $inc: { num_open_issues: -1 } },
+                    { new: true }
+                )
                 resolve('Pull Request Accepted/Merged Successfully')
             }
         } catch (err) {
