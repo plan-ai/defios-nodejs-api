@@ -137,3 +137,6 @@ dist
 
 #ignore config file
 /config
+
+#ignore authorized creator wallet
+authorized_creator

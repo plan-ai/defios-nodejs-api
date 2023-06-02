@@ -18,9 +18,10 @@ export const repositoryCreated = async (res: IRepositoryCreated) => {
                     .get(new_metadata_uri)
                     .then(async (response) => {
                         const tokenAddress = res.rewardsMint
+                        console.log(res)
                         const token = new Token({
                             token_spl_addr: tokenAddress.toBase58(),
-                            token_symbol: res.tokenSymbol,
+                            token_symbol: res.tokenImage,
                             token_name: res.tokenName,
                             token_image_url: response.data.image,
                         })

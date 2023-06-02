@@ -105,7 +105,7 @@ const createCommunalAccount = async (mintKeypair: string) => {
             associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         })
         .signers([authKeyPair])
-        .rpc({ skipPreflight: true })
+        .rpc({ skipPreflight: false })
 }
 
 const createNamesRouter = async (
@@ -164,7 +164,7 @@ const getVerifiedUserAccount = async (
     userName: string,
     userPubkey: PublicKey
 ) => {
-    const nameRouterAccount = await getNameRouterAccount('defios.com', 1)
+    const nameRouterAccount = await getNameRouterAccount('defios.com', 2)
     const [verifiedUserAccount] = await web3.PublicKey.findProgramAddress(
         [
             Buffer.from(userName),
@@ -176,8 +176,8 @@ const getVerifiedUserAccount = async (
     return verifiedUserAccount
 }
 
-const checkRouter = async () => {
-    const nameRouterAccount = await getNameRouterAccount('defios.com', 1)
+const checkRouter = async (domain:string,version:number) => {
+    const nameRouterAccount = await getNameRouterAccount(domain, version)
     const data = await program.account.nameRouter
         .fetch(nameRouterAccount)
         .catch(() => {
@@ -207,7 +207,7 @@ const addUser = async (github_uid: string, user_public_key: string) => {
         return { ...data, verifiedUserAccount: verifiedUserAccount }
     }
 
-    const nameRouterAccount = await getNameRouterAccount('defios.com', 1)
+    const nameRouterAccount = await getNameRouterAccount('defios.com', 2)
 
     const message = Uint8Array.from(
         Buffer.from(`DefiOS(${userName}, ${userPubkey.toString()})`)
@@ -250,11 +250,11 @@ const addUser = async (github_uid: string, user_public_key: string) => {
 }
 
 app.get('/namesrouter', async (req: Request, res: Response) => {
-    const checkIfAvailable = await checkRouter()
+    const checkIfAvailable = await checkRouter('defios.com',2)
     if (checkIfAvailable) {
         res.send(checkIfAvailable)
     } else {
-        await createNamesRouter('defios.com', 1)
+        await createNamesRouter('defios.com', 2)
         res.send('Created Names router.')
     }
 })
