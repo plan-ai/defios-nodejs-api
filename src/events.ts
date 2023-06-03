@@ -39,7 +39,10 @@ export interface IAddRoadmapDataEvent {
     roadmapDescriptionLink: String
     roadmapCreationUnix: number
     roadmapCreator: PublicKey
+    rootObjectiveIds: Array<PublicKey>
+    roadmapOutlook: number
 }
+
 export interface INameRouterCreated {
     routerCreator: PublicKey
     nameRouterAccount: PublicKey

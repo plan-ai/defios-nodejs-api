@@ -14,6 +14,7 @@ export interface Roadmap {
     roadmap_objectives_graph: Object
     roadmap_creation_date: mongoose.Schema.Types.Date
     roadmap_title: mongoose.Schema.Types.String
+    roadmap_description: mongoose.Schema.Types.String
     roadmap_outlook:
         | 'Next 2 Yrs'
         | 'Long-Term Public Good'
@@ -101,8 +102,12 @@ export const RoadmapSchema = new mongoose.Schema<Roadmap>(
         },
         roadmap_creation_date: {
             type: mongoose.Schema.Types.Date,
+            set: (d) => new Date(d * 1000),
         },
         roadmap_title: {
+            type: mongoose.Schema.Types.String,
+        },
+        roadmap_description: {
             type: mongoose.Schema.Types.String,
         },
         roadmap_outlook: {

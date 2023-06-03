@@ -1,32 +1,24 @@
-import { IAddRoadmapData } from '../events'
-import { IIssuePRs, Issues, IIssue } from '../models/issues'
+import { IAddRoadmapDataEvent } from '../events'
 import { Roadmap } from '../models/roadmap'
-import { DateTime } from 'luxon'
+import { User } from '../models/users'
 
-export const addRoadmapData = async (commit: IAddRoadmapData) => {
+export const addRoadmapData = async (roadmap: IAddRoadmapDataEvent) => {
     return new Promise(async (resolve, reject) => {
-        const roadmap_obj = await Roadmap.findOne({
-            roadmap_title: commit.roadmap_title.toString(),
+        const user = await User.findOne({
+            user_phantom_address: roadmap.roadmapCreator.toString(),
         })
-
-        if (roadmap_obj) {
-            //modify roadmap_obj
-            roadmap_obj.roadmap_objectives_list.push({
-                objective_title: commit.roadmap_title.toString(),
-                objective_creation_date: DateTime.now().toString(),
-                objective_creator_gh_name: commit.roadmap_creator.toString(),
-                // objective_creator_gh_profile_pic: commit.roadmap_objective_creator_gh_profile_pic.toString(),
-                // objective_deliverable: commit.roadmap_objective_deliverable.toString(),
-                // objective_state: commit.roadmap_objective_state.toString(),
-                objective_start_date: DateTime.now().toString(),
-                // objective_end_date: commit.roadmap_objective_end_date,
-            })
-            roadmap_obj.save((err, issue) => {
-                if (err) {
-                    reject(err)
-                }
-                resolve(issue)
-            })
+        if (!user) {
+            reject('User not found')
+            return
         }
+        const new_roadmap = new Roadmap({
+            roadmap_title: roadmap.roadmapTitle,
+            roadmap_description: roadmap.roadmapDescriptionLink,
+            roadmap_creation_date: roadmap.roadmapCreationUnix,
+            roadmap_creator_gh: user.user_github,
+            roadmap_creator_gh_profile_url: user.user_profile_pic,
+            roadmap_creator_gh_name: user.user_gh_name,
+        })
+        new_roadmap.save()
     })
 }

@@ -176,7 +176,7 @@ const getVerifiedUserAccount = async (
     return verifiedUserAccount
 }
 
-const checkRouter = async (domain:string,version:number) => {
+const checkRouter = async (domain: string, version: number) => {
     const nameRouterAccount = await getNameRouterAccount(domain, version)
     const data = await program.account.nameRouter
         .fetch(nameRouterAccount)
@@ -250,7 +250,7 @@ const addUser = async (github_uid: string, user_public_key: string) => {
 }
 
 app.get('/namesrouter', async (req: Request, res: Response) => {
-    const checkIfAvailable = await checkRouter('defios.com',2)
+    const checkIfAvailable = await checkRouter('defios.com', 2)
     if (checkIfAvailable) {
         res.send(checkIfAvailable)
     } else {
