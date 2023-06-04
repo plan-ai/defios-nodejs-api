@@ -15,32 +15,32 @@ export interface IAddCommitToPR {
 }
 
 export interface IAddChildObjective {
-    parentAccount: PublicKey
+    parentObjectiveAccount: PublicKey
     addedBy: PublicKey
+    objectives: Array<PublicKey>
 }
 
 export interface IAddObjectiveDataEvent {
-    objective_title: String
-    objective_metadata_uri: String
-    objective_start_unix: number
-    objective_creation_unix: number
-
-    // look into these 2 fields
-
-    // objective_end_unix: Option<number>,
-    // objective_deliverable: ObjectiveDeliverable,
-
-    objective_public_key: PublicKey
-    objective_issue: PublicKey
+    objectiveTitle: String
+    objectiveMetadataUri: String
+    objectiveStartUnix: BN
+    objectiveCreationUnix: BN
+    objectiveEndUnix: BN | null,
+    objectiveDeliverable: object,
+    objectivePublicKey: PublicKey
+    objectiveIssue: PublicKey
+    childObjectives: Array<PublicKey>
 }
 
 export interface IAddRoadmapDataEvent {
     roadmapTitle: String
     roadmapDescriptionLink: String
-    roadmapCreationUnix: number
+    roadmapCreationUnix: BN
     roadmapCreator: PublicKey
     rootObjectiveIds: Array<PublicKey>
-    roadmapOutlook: number
+    roadmapOutlook: object,
+    roadmapImageUrl: String,
+    roadmap: PublicKey
 }
 
 export interface INameRouterCreated {
