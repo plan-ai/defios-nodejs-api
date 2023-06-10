@@ -25,8 +25,8 @@ export interface IAddObjectiveDataEvent {
     objectiveMetadataUri: String
     objectiveStartUnix: BN
     objectiveCreationUnix: BN
-    objectiveEndUnix: BN | null,
-    objectiveDeliverable: object,
+    objectiveEndUnix: BN | null
+    objectiveDeliverable: object
     objectivePublicKey: PublicKey
     objectiveIssue: PublicKey
     childObjectives: Array<PublicKey>
@@ -38,8 +38,8 @@ export interface IAddRoadmapDataEvent {
     roadmapCreationUnix: BN
     roadmapCreator: PublicKey
     rootObjectiveIds: Array<PublicKey>
-    roadmapOutlook: object,
-    roadmapImageUrl: String,
+    roadmapOutlook: object
+    roadmapImageUrl: String
     roadmap: PublicKey
 }
 
