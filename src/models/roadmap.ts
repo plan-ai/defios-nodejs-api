@@ -1,15 +1,12 @@
 import mongoose from 'mongoose'
 
 export interface Roadmap {
+    roadmap_key: mongoose.Schema.Types.String
     roadmap_creator_gh: mongoose.Schema.Types.String
     roadmap_creator_gh_profile_url: mongoose.Schema.Types.String
     roadmap_creator_gh_name: mongoose.Schema.Types.String
     roadmap_cover_img_url: mongoose.Schema.Types.String
-    roadmap_total_stake: mongoose.Schema.Types.Number
     roadmap_active_objectives: mongoose.Schema.Types.Number
-    roadmap_outcome_types: Array<
-        'Infrastructure' | 'Tooling' | 'Publication' | 'Product' | 'Other'
-    >
     roadmap_objectives_list: RoadmapObjective[]
     roadmap_objectives_graph: Object
     roadmap_creation_date: mongoose.Schema.Types.Date
@@ -23,6 +20,8 @@ export interface Roadmap {
 }
 
 export interface RoadmapObjective {
+    roadmap: mongoose.Schema.Types.String
+    objective_key: mongoose.Schema.Types.String
     objective_title: mongoose.Schema.Types.String
     objective_creation_date: mongoose.Schema.Types.Date
     objective_creator_gh_name: mongoose.Schema.Types.String
@@ -40,6 +39,14 @@ export interface RoadmapObjective {
 
 export const RoadmapObjectiveSchema = new mongoose.Schema<RoadmapObjective>(
     {
+        roadmap: {
+            type: mongoose.Schema.Types.String,
+            required: true,
+        },
+        objective_key: {
+            type: mongoose.Schema.Types.String,
+            required: true,
+        },
         objective_title: {
             type: mongoose.Schema.Types.String,
             required: true,
@@ -71,6 +78,10 @@ export const RoadmapObjectiveSchema = new mongoose.Schema<RoadmapObjective>(
 
 export const RoadmapSchema = new mongoose.Schema<Roadmap>(
     {
+        roadmap_key: {
+            type: mongoose.Schema.Types.String,
+            required: true,
+        },
         roadmap_creator_gh: {
             type: mongoose.Schema.Types.String,
         },
@@ -85,14 +96,8 @@ export const RoadmapSchema = new mongoose.Schema<Roadmap>(
         roadmap_cover_img_url: {
             type: mongoose.Schema.Types.String,
         },
-        roadmap_total_stake: {
-            type: mongoose.Schema.Types.Number,
-        },
         roadmap_active_objectives: {
             type: mongoose.Schema.Types.Number,
-        },
-        roadmap_outcome_types: {
-            type: [mongoose.Schema.Types.String],
         },
         roadmap_objectives_list: {
             type: [RoadmapObjectiveSchema],
@@ -102,7 +107,7 @@ export const RoadmapSchema = new mongoose.Schema<Roadmap>(
         },
         roadmap_creation_date: {
             type: mongoose.Schema.Types.Date,
-            set: (d) => new Date(d * 1000),
+            set: (d: number) => new Date(d * 1000),
         },
         roadmap_title: {
             type: mongoose.Schema.Types.String,
