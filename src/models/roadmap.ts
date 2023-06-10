@@ -40,7 +40,7 @@ export interface RoadmapObjective {
 export const RoadmapObjectiveSchema = new mongoose.Schema<RoadmapObjective>(
     {
         roadmap: {
-            type: mongoose.Schema.Types.String
+            type: mongoose.Schema.Types.String,
         },
         objective_key: {
             type: mongoose.Schema.Types.String,
@@ -52,6 +52,7 @@ export const RoadmapObjectiveSchema = new mongoose.Schema<RoadmapObjective>(
         },
         objective_creation_date: {
             type: mongoose.Schema.Types.Date,
+            set: (d: number) => new Date(d * 1000)
         },
         objective_creator_gh_name: {
             type: mongoose.Schema.Types.String,
@@ -67,9 +68,11 @@ export const RoadmapObjectiveSchema = new mongoose.Schema<RoadmapObjective>(
         },
         objective_start_date: {
             type: mongoose.Schema.Types.Date,
+            set: (d: number) => new Date(d * 1000),
         },
         objective_end_date: {
             type: mongoose.Schema.Types.Date,
+            set: (d: number) => new Date(d * 1000),
         },
     },
     { versionKey: false }

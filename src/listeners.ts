@@ -120,6 +120,7 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
     program.addEventListener(
         'RoadmapDataAdded',
         (res: IAddRoadmapDataEvent) => {
+            console.log(res)
             addRoadmapData(res)
                 .then(() => {
                     console.log('RoadmapDataAdded')
