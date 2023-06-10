@@ -164,7 +164,7 @@ const getVerifiedUserAccount = async (
     userName: string,
     userPubkey: PublicKey
 ) => {
-    const nameRouterAccount = await getNameRouterAccount('defios.com', 2)
+    const nameRouterAccount = await getNameRouterAccount('defios.com', 12)
     const [verifiedUserAccount] = await web3.PublicKey.findProgramAddress(
         [
             Buffer.from(userName),
@@ -207,7 +207,7 @@ const addUser = async (github_uid: string, user_public_key: string) => {
         return { ...data, verifiedUserAccount: verifiedUserAccount }
     }
 
-    const nameRouterAccount = await getNameRouterAccount('defios.com', 2)
+    const nameRouterAccount = await getNameRouterAccount('defios.com', 12)
 
     const message = Uint8Array.from(
         Buffer.from(`DefiOS(${userName}, ${userPubkey.toString()})`)
@@ -250,11 +250,11 @@ const addUser = async (github_uid: string, user_public_key: string) => {
 }
 
 app.get('/namesrouter', async (req: Request, res: Response) => {
-    const checkIfAvailable = await checkRouter('defios.com', 2)
+    const checkIfAvailable = await checkRouter('defios.com', 12)
     if (checkIfAvailable) {
         res.send(checkIfAvailable)
     } else {
-        await createNamesRouter('defios.com', 2)
+        await createNamesRouter('defios.com', 12)
         res.send('Created Names router.')
     }
 })

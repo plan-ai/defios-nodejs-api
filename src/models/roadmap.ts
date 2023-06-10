@@ -120,3 +120,4 @@ export const RoadmapSchema = new mongoose.Schema<Roadmap>(
 )
 
 export const Roadmap = mongoose.model<Roadmap>('Roadmap', RoadmapSchema)
+export const RoadmapObjective = mongoose.model<RoadmapObjective>('RoadmapObjective',RoadmapObjectiveSchema)

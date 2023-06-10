@@ -14,7 +14,7 @@ export interface IAddCommitToPR {
     by: PublicKey
 }
 
-export interface IAddChildObjective {
+export interface IAddChildObjectiveEvent {
     parentObjectiveAccount: PublicKey
     addedBy: PublicKey
     objectives: Array<PublicKey>
