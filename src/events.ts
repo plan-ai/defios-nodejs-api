@@ -29,6 +29,7 @@ export interface IAddObjectiveDataEvent {
     objectiveDeliverable: object
     objectivePublicKey: PublicKey
     objectiveIssue: PublicKey
+    objectiveAddr: PublicKey
     childObjectives: Array<PublicKey>
 }
 
@@ -41,6 +42,7 @@ export interface IAddRoadmapDataEvent {
     roadmapOutlook: object
     roadmapImageUrl: String
     roadmap: PublicKey
+    roadmapRepository: String
 }
 
 export interface INameRouterCreated {
