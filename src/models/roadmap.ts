@@ -40,8 +40,7 @@ export interface RoadmapObjective {
 export const RoadmapObjectiveSchema = new mongoose.Schema<RoadmapObjective>(
     {
         roadmap: {
-            type: mongoose.Schema.Types.String,
-            required: true,
+            type: mongoose.Schema.Types.String
         },
         objective_key: {
             type: mongoose.Schema.Types.String,
