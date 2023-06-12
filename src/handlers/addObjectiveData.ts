@@ -18,7 +18,7 @@ export const addObjectiveData = async (objective: IAddObjectiveDataEvent) => {
                 objective_end = objective.objectiveEndUnix
             }
             let children: Array<String> = []
-            for(var child_objectives in objective.childObjectives){\
+            for(var child_objectives in objective.childObjectives){
                 children.push(child_objectives.toString())
             }
             const new_objective = new RoadmapObjective({

@@ -14,12 +14,7 @@ import dotenv from 'dotenv'
 import findConfig from 'find-config'
 import {
     ASSOCIATED_TOKEN_PROGRAM_ID,
-    createAssociatedTokenAccount,
-    createAssociatedTokenAccountInstruction,
-    createInitializeMintInstruction,
-    createMintToCheckedInstruction,
     getAssociatedTokenAddress,
-    MintLayout,
     TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
 dotenv.config({ path: findConfig('.env') })
@@ -67,7 +62,7 @@ const createDefaultSchedule = async () => {
     await program.methods
         .setDefaultSchedule(
             4,
-            new anchor.BN(2500 * 10 ** 9),
+            new anchor.BN(2500),
             new anchor.BN(10 ** 7)
         )
         .accounts({
