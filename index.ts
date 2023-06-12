@@ -40,9 +40,9 @@ const PROGRAM_ID = new web3.PublicKey(process.env.DEFIOS_PROGRAM_ID as string)
 
 let authSecretKey = bs58.decode(process.env.AUTH_KEY as string)
 let authKeyPair = web3.Keypair.fromSecretKey(authSecretKey)
+const usdcMint = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
 console.log(`Authorised creator: ${authKeyPair.publicKey.toString()}`)
 anchor.setProvider(anchor.AnchorProvider.env())
-
 const program = new anchor.Program(IDL, PROGRAM_ID) as Program<Defios>
 const {
     provider: { connection },
@@ -60,11 +60,7 @@ const createDefaultSchedule = async () => {
     ])
 
     await program.methods
-        .setDefaultSchedule(
-            4,
-            new anchor.BN(2500),
-            new anchor.BN(10 ** 7)
-        )
+        .setDefaultSchedule(4, new anchor.BN(2500), new anchor.BN(10 ** 7))
         .accounts({
             authority: authKeyPair.publicKey,
             defaultSchedule: defaultVestingSchedule,
@@ -88,6 +84,12 @@ const createCommunalAccount = async (mintKeypair: string) => {
         true
     )
 
+    const communalUSDCaccount = await getAssociatedTokenAddress(
+        usdcMint,
+        communal_account,
+        true
+    )
+
     await program.methods
         .createCommunalAccount()
         .accounts({
@@ -98,6 +100,8 @@ const createCommunalAccount = async (mintKeypair: string) => {
             rewardsMint: mintKeypair,
             tokenProgram: TOKEN_PROGRAM_ID,
             associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+            usdcMint: usdcMint,
+            communalUsdcAccount: communalUSDCaccount,
         })
         .signers([authKeyPair])
         .rpc({ skipPreflight: false })

@@ -221,7 +221,7 @@ export type Defios = {
                             {
                                 kind: 'arg'
                                 type: 'string'
-                                path: 'name'
+                                path: 'id'
                             },
                             {
                                 kind: 'account'
@@ -289,6 +289,12 @@ export type Defios = {
                     }
                 },
                 {
+                    name: 'metadata'
+                    isMut: true
+                    isSigner: false
+                    isOptional: true
+                },
+                {
                     name: 'rewardsMint'
                     isMut: true
                     isSigner: false
@@ -328,11 +334,16 @@ export type Defios = {
                     name: 'systemProgram'
                     isMut: false
                     isSigner: false
+                },
+                {
+                    name: 'tokenMetadataProgram'
+                    isMut: false
+                    isSigner: false
                 }
             ]
             args: [
                 {
-                    name: 'name'
+                    name: 'id'
                     type: 'string'
                 },
                 {
@@ -448,7 +459,7 @@ export type Defios = {
                                 kind: 'account'
                                 type: 'string'
                                 account: 'Repository'
-                                path: 'repository_account.name'
+                                path: 'repository_account.id'
                             },
                             {
                                 kind: 'account'
@@ -550,7 +561,7 @@ export type Defios = {
                                 kind: 'account'
                                 type: 'string'
                                 account: 'Repository'
-                                path: 'repository_account.name'
+                                path: 'repository_account.id'
                             },
                             {
                                 kind: 'account'
@@ -679,7 +690,7 @@ export type Defios = {
                                 kind: 'account'
                                 type: 'string'
                                 account: 'Repository'
-                                path: 'repository_account.name'
+                                path: 'repository_account.id'
                             },
                             {
                                 kind: 'account'
@@ -829,7 +840,7 @@ export type Defios = {
                                 kind: 'account'
                                 type: 'string'
                                 account: 'Repository'
-                                path: 'repository_account.name'
+                                path: 'repository_account.id'
                             },
                             {
                                 kind: 'account'
@@ -996,63 +1007,6 @@ export type Defios = {
                     isSigner: false
                 },
                 {
-                    name: 'routerCreator'
-                    isMut: true
-                    isSigner: false
-                },
-                {
-                    name: 'nameRouterAccount'
-                    isMut: false
-                    isSigner: false
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account'
-                                type: 'string'
-                                account: 'NameRouter'
-                                path: 'name_router_account.signing_domain'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'u8'
-                                account: 'NameRouter'
-                                path: 'name_router_account.signature_version'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                path: 'router_creator'
-                            }
-                        ]
-                    }
-                },
-                {
-                    name: 'pullRequestVerifiedUser'
-                    isMut: false
-                    isSigner: false
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account'
-                                type: 'string'
-                                account: 'VerifiedUser'
-                                path: 'pull_request_verified_user.user_name'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                path: 'pull_request_creator'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                account: 'NameRouter'
-                                path: 'name_router_account'
-                            }
-                        ]
-                    }
-                },
-                {
                     name: 'repositoryCreator'
                     isMut: false
                     isSigner: false
@@ -1077,7 +1031,7 @@ export type Defios = {
                                 kind: 'account'
                                 type: 'string'
                                 account: 'Repository'
-                                path: 'repository_account.name'
+                                path: 'repository_account.id'
                             },
                             {
                                 kind: 'account'
@@ -1180,6 +1134,32 @@ export type Defios = {
                     }
                 },
                 {
+                    name: 'repositoryAccount'
+                    isMut: true
+                    isSigner: false
+                    pda: {
+                        seeds: [
+                            {
+                                kind: 'const'
+                                type: 'string'
+                                value: 'repository'
+                            },
+                            {
+                                kind: 'account'
+                                type: 'string'
+                                account: 'Repository'
+                                path: 'repository_account.id'
+                            },
+                            {
+                                kind: 'account'
+                                type: 'publicKey'
+                                account: 'Repository'
+                                path: 'repository_account.repository_creator'
+                            }
+                        ]
+                    }
+                },
+                {
                     name: 'roadmapVerifiedUser'
                     isMut: false
                     isSigner: false
@@ -1252,6 +1232,10 @@ export type Defios = {
                     type: 'string'
                 },
                 {
+                    name: 'roadmapImageUrl'
+                    type: 'string'
+                },
+                {
                     name: 'roadmapOutlook'
                     type: {
                         defined: 'RoadmapOutlook'
@@ -1301,6 +1285,32 @@ export type Defios = {
                     name: 'objectiveIssue'
                     isMut: true
                     isSigner: false
+                },
+                {
+                    name: 'repositoryAccount'
+                    isMut: true
+                    isSigner: false
+                    pda: {
+                        seeds: [
+                            {
+                                kind: 'const'
+                                type: 'string'
+                                value: 'repository'
+                            },
+                            {
+                                kind: 'account'
+                                type: 'string'
+                                account: 'Repository'
+                                path: 'repository_account.id'
+                            },
+                            {
+                                kind: 'account'
+                                type: 'publicKey'
+                                account: 'Repository'
+                                path: 'repository_account.repository_creator'
+                            }
+                        ]
+                    }
                 },
                 {
                     name: 'objectiveVerifiedUser'
@@ -1376,12 +1386,12 @@ export type Defios = {
                 },
                 {
                     name: 'objectiveStartUnix'
-                    type: 'u64'
+                    type: 'i64'
                 },
                 {
                     name: 'objectiveEndUnix'
                     type: {
-                        option: 'u64'
+                        option: 'i64'
                     }
                 },
                 {
@@ -1411,72 +1421,10 @@ export type Defios = {
                     isOptional: true
                 },
                 {
-                    name: 'objectiveAccount'
-                    isMut: true
-                    isSigner: false
-                },
-                {
-                    name: 'parentAccount'
+                    name: 'parentObjectiveAccount'
                     isMut: true
                     isSigner: false
                     isOptional: true
-                },
-                {
-                    name: 'objectiveVerifiedUser'
-                    isMut: false
-                    isSigner: false
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account'
-                                type: 'string'
-                                account: 'VerifiedUser'
-                                path: 'objective_verified_user.user_name'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                path: 'child_objective_adder'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                account: 'NameRouter'
-                                path: 'name_router_account'
-                            }
-                        ]
-                    }
-                },
-                {
-                    name: 'nameRouterAccount'
-                    isMut: false
-                    isSigner: false
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account'
-                                type: 'string'
-                                account: 'NameRouter'
-                                path: 'name_router_account.signing_domain'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'u8'
-                                account: 'NameRouter'
-                                path: 'name_router_account.signature_version'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                path: 'router_creator'
-                            }
-                        ]
-                    }
-                },
-                {
-                    name: 'routerCreator'
-                    isMut: false
-                    isSigner: false
                 },
                 {
                     name: 'systemProgram'
@@ -1497,11 +1445,6 @@ export type Defios = {
                 {
                     name: 'issue'
                     isMut: true
-                    isSigner: false
-                },
-                {
-                    name: 'commit'
-                    isMut: false
                     isSigner: false
                 },
                 {
@@ -1628,70 +1571,8 @@ export type Defios = {
                     isSigner: true
                 },
                 {
-                    name: 'commit'
-                    isMut: false
-                    isSigner: false
-                },
-                {
                     name: 'pullRequestMetadataAccount'
                     isMut: true
-                    isSigner: false
-                },
-                {
-                    name: 'commitVerifiedUser'
-                    isMut: false
-                    isSigner: false
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account'
-                                type: 'string'
-                                account: 'VerifiedUser'
-                                path: 'commit_verified_user.user_name'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                path: 'commit_addr'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                account: 'NameRouter'
-                                path: 'name_router_account'
-                            }
-                        ]
-                    }
-                },
-                {
-                    name: 'nameRouterAccount'
-                    isMut: false
-                    isSigner: false
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account'
-                                type: 'string'
-                                account: 'NameRouter'
-                                path: 'name_router_account.signing_domain'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'u8'
-                                account: 'NameRouter'
-                                path: 'name_router_account.signature_version'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                path: 'router_creator'
-                            }
-                        ]
-                    }
-                },
-                {
-                    name: 'routerCreator'
-                    isMut: false
                     isSigner: false
                 },
                 {
@@ -1709,63 +1590,6 @@ export type Defios = {
                     name: 'repositoryCreator'
                     isMut: true
                     isSigner: true
-                },
-                {
-                    name: 'repositoryVerifiedUser'
-                    isMut: false
-                    isSigner: false
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account'
-                                type: 'string'
-                                account: 'VerifiedUser'
-                                path: 'repository_verified_user.user_name'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                path: 'repository_creator'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                account: 'NameRouter'
-                                path: 'name_router_account'
-                            }
-                        ]
-                    }
-                },
-                {
-                    name: 'nameRouterAccount'
-                    isMut: false
-                    isSigner: false
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account'
-                                type: 'string'
-                                account: 'NameRouter'
-                                path: 'name_router_account.signing_domain'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'u8'
-                                account: 'NameRouter'
-                                path: 'name_router_account.signature_version'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                path: 'router_creator'
-                            }
-                        ]
-                    }
-                },
-                {
-                    name: 'routerCreator'
-                    isMut: false
-                    isSigner: false
                 },
                 {
                     name: 'repositoryCreatorTokenAccount'
@@ -1789,9 +1613,10 @@ export type Defios = {
                                 value: 'repository'
                             },
                             {
-                                kind: 'arg'
+                                kind: 'account'
                                 type: 'string'
-                                path: 'repo_name'
+                                account: 'Repository'
+                                path: 'repository_account.id'
                             },
                             {
                                 kind: 'account'
@@ -1837,12 +1662,7 @@ export type Defios = {
                     isSigner: false
                 }
             ]
-            args: [
-                {
-                    name: 'repoName'
-                    type: 'string'
-                }
-            ]
+            args: []
         },
         {
             name: 'acceptPr'
@@ -1851,32 +1671,6 @@ export type Defios = {
                     name: 'repositoryCreator'
                     isMut: true
                     isSigner: true
-                },
-                {
-                    name: 'repositoryVerifiedUser'
-                    isMut: false
-                    isSigner: false
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account'
-                                type: 'string'
-                                account: 'VerifiedUser'
-                                path: 'repository_verified_user.user_name'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                path: 'repository_creator'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                account: 'NameRouter'
-                                path: 'name_router_account'
-                            }
-                        ]
-                    }
                 },
                 {
                     name: 'pullRequestAddr'
@@ -1936,63 +1730,6 @@ export type Defios = {
                             }
                         ]
                     }
-                },
-                {
-                    name: 'pullRequestVerifiedUser'
-                    isMut: false
-                    isSigner: false
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account'
-                                type: 'string'
-                                account: 'VerifiedUser'
-                                path: 'pull_request_verified_user.user_name'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                path: 'pull_request_addr'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                account: 'NameRouter'
-                                path: 'name_router_account'
-                            }
-                        ]
-                    }
-                },
-                {
-                    name: 'nameRouterAccount'
-                    isMut: false
-                    isSigner: false
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account'
-                                type: 'string'
-                                account: 'NameRouter'
-                                path: 'name_router_account.signing_domain'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'u8'
-                                account: 'NameRouter'
-                                path: 'name_router_account.signature_version'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                path: 'router_creator'
-                            }
-                        ]
-                    }
-                },
-                {
-                    name: 'routerCreator'
-                    isMut: false
-                    isSigner: false
                 },
                 {
                     name: 'systemProgram'
@@ -2101,7 +1838,17 @@ export type Defios = {
                     isSigner: false
                 },
                 {
+                    name: 'communalUsdcAccount'
+                    isMut: true
+                    isSigner: false
+                },
+                {
                     name: 'rewardsMint'
+                    isMut: false
+                    isSigner: false
+                },
+                {
+                    name: 'usdcMint'
                     isMut: false
                     isSigner: false
                 },
@@ -2167,7 +1914,17 @@ export type Defios = {
                     isSigner: false
                 },
                 {
+                    name: 'communalUsdcAccount'
+                    isMut: true
+                    isSigner: false
+                },
+                {
                     name: 'buyerTokenAccount'
+                    isMut: true
+                    isSigner: false
+                },
+                {
+                    name: 'buyerUsdcAccount'
                     isMut: true
                     isSigner: false
                 },
@@ -2207,6 +1964,35 @@ export type Defios = {
                     }
                 },
                 {
+                    name: 'usdcMint'
+                    isMut: false
+                    isSigner: false
+                },
+                {
+                    name: 'defaultSchedule'
+                    isMut: false
+                    isSigner: false
+                    pda: {
+                        seeds: [
+                            {
+                                kind: 'const'
+                                type: 'string'
+                                value: 'isGodReal?'
+                            },
+                            {
+                                kind: 'const'
+                                type: 'string'
+                                value: 'DoULoveMe?'
+                            },
+                            {
+                                kind: 'const'
+                                type: 'string'
+                                value: 'SweetChick'
+                            }
+                        ]
+                    }
+                },
+                {
                     name: 'associatedTokenProgram'
                     isMut: false
                     isSigner: false
@@ -2219,7 +2005,7 @@ export type Defios = {
             ]
             args: [
                 {
-                    name: 'lamportsAmount'
+                    name: 'usdcAmount'
                     type: 'u64'
                 },
                 {
@@ -2272,12 +2058,22 @@ export type Defios = {
                     isSigner: false
                 },
                 {
+                    name: 'communalUsdcAccount'
+                    isMut: true
+                    isSigner: false
+                },
+                {
                     name: 'sellerTokenAccount'
                     isMut: true
                     isSigner: false
                 },
                 {
                     name: 'repositoryAccount'
+                    isMut: true
+                    isSigner: false
+                },
+                {
+                    name: 'sellerUsdcAccount'
                     isMut: true
                     isSigner: false
                 },
@@ -2312,6 +2108,35 @@ export type Defios = {
                     }
                 },
                 {
+                    name: 'usdcMint'
+                    isMut: false
+                    isSigner: false
+                },
+                {
+                    name: 'defaultSchedule'
+                    isMut: false
+                    isSigner: false
+                    pda: {
+                        seeds: [
+                            {
+                                kind: 'const'
+                                type: 'string'
+                                value: 'isGodReal?'
+                            },
+                            {
+                                kind: 'const'
+                                type: 'string'
+                                value: 'DoULoveMe?'
+                            },
+                            {
+                                kind: 'const'
+                                type: 'string'
+                                value: 'SweetChick'
+                            }
+                        ]
+                    }
+                },
+                {
                     name: 'associatedTokenProgram'
                     isMut: false
                     isSigner: false
@@ -2324,7 +2149,7 @@ export type Defios = {
             ]
             args: [
                 {
-                    name: 'lamportsAmount'
+                    name: 'usdcAmount'
                     type: 'u64'
                 },
                 {
@@ -2387,70 +2212,6 @@ export type Defios = {
             ]
         },
         {
-            name: 'createSplToken'
-            accounts: [
-                {
-                    name: 'metadata'
-                    isMut: true
-                    isSigner: false
-                },
-                {
-                    name: 'mint'
-                    isMut: true
-                    isSigner: true
-                },
-                {
-                    name: 'tokenAccount'
-                    isMut: true
-                    isSigner: false
-                },
-                {
-                    name: 'mintAuthority'
-                    isMut: true
-                    isSigner: true
-                },
-                {
-                    name: 'rent'
-                    isMut: false
-                    isSigner: false
-                },
-                {
-                    name: 'systemProgram'
-                    isMut: false
-                    isSigner: false
-                },
-                {
-                    name: 'tokenProgram'
-                    isMut: false
-                    isSigner: false
-                },
-                {
-                    name: 'associatedTokenProgram'
-                    isMut: false
-                    isSigner: false
-                },
-                {
-                    name: 'tokenMetadataProgram'
-                    isMut: false
-                    isSigner: false
-                }
-            ]
-            args: [
-                {
-                    name: 'metadataTitle'
-                    type: 'string'
-                },
-                {
-                    name: 'metadataSymbol'
-                    type: 'string'
-                },
-                {
-                    name: 'metadataUri'
-                    type: 'string'
-                }
-            ]
-        },
-        {
             name: 'stakePr'
             accounts: [
                 {
@@ -2489,32 +2250,6 @@ export type Defios = {
                     }
                 },
                 {
-                    name: 'pullRequestVerifiedUser'
-                    isMut: false
-                    isSigner: false
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account'
-                                type: 'string'
-                                account: 'VerifiedUser'
-                                path: 'pull_request_verified_user.user_name'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                path: 'pull_request_addr'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                account: 'NameRouter'
-                                path: 'name_router_account'
-                            }
-                        ]
-                    }
-                },
-                {
                     name: 'pullRequestTokenAccount'
                     isMut: true
                     isSigner: false
@@ -2527,37 +2262,6 @@ export type Defios = {
                 {
                     name: 'pullRequestStakerTokenAccount'
                     isMut: true
-                    isSigner: false
-                },
-                {
-                    name: 'nameRouterAccount'
-                    isMut: false
-                    isSigner: false
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account'
-                                type: 'string'
-                                account: 'NameRouter'
-                                path: 'name_router_account.signing_domain'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'u8'
-                                account: 'NameRouter'
-                                path: 'name_router_account.signature_version'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                path: 'router_creator'
-                            }
-                        ]
-                    }
-                },
-                {
-                    name: 'routerCreator'
-                    isMut: false
                     isSigner: false
                 },
                 {
@@ -2652,32 +2356,6 @@ export type Defios = {
                     }
                 },
                 {
-                    name: 'pullRequestVerifiedUser'
-                    isMut: false
-                    isSigner: false
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account'
-                                type: 'string'
-                                account: 'VerifiedUser'
-                                path: 'pull_request_verified_user.user_name'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                path: 'pull_request_addr'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                account: 'NameRouter'
-                                path: 'name_router_account'
-                            }
-                        ]
-                    }
-                },
-                {
                     name: 'pullRequestTokenAccount'
                     isMut: true
                     isSigner: false
@@ -2690,37 +2368,6 @@ export type Defios = {
                 {
                     name: 'pullRequestStakerTokenAccount'
                     isMut: true
-                    isSigner: false
-                },
-                {
-                    name: 'nameRouterAccount'
-                    isMut: false
-                    isSigner: false
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account'
-                                type: 'string'
-                                account: 'NameRouter'
-                                path: 'name_router_account.signing_domain'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'u8'
-                                account: 'NameRouter'
-                                path: 'name_router_account.signature_version'
-                            },
-                            {
-                                kind: 'account'
-                                type: 'publicKey'
-                                path: 'router_creator'
-                            }
-                        ]
-                    }
-                },
-                {
-                    name: 'routerCreator'
-                    isMut: false
                     isSigner: false
                 },
                 {
@@ -2853,7 +2500,7 @@ export type Defios = {
                         }
                     },
                     {
-                        name: 'name'
+                        name: 'id'
                         type: 'string'
                     },
                     {
@@ -3026,7 +2673,9 @@ export type Defios = {
                     },
                     {
                         name: 'stakedAt'
-                        type: 'u64'
+                        type: {
+                            vec: 'u64'
+                        }
                     },
                     {
                         name: 'issueStaker'
@@ -3058,7 +2707,9 @@ export type Defios = {
                     },
                     {
                         name: 'stakedAt'
-                        type: 'u64'
+                        type: {
+                            vec: 'u64'
+                        }
                     },
                     {
                         name: 'prStaker'
@@ -3090,7 +2741,7 @@ export type Defios = {
                     },
                     {
                         name: 'roadmapCreationUnix'
-                        type: 'u64'
+                        type: 'i64'
                     },
                     {
                         name: 'roadmapCreatorId'
@@ -3099,10 +2750,6 @@ export type Defios = {
                     {
                         name: 'roadmapDescriptionLink'
                         type: 'string'
-                    },
-                    {
-                        name: 'numberOfObjectives'
-                        type: 'u64'
                     },
                     {
                         name: 'rootObjectiveIds'
@@ -3119,6 +2766,14 @@ export type Defios = {
                         type: {
                             defined: 'RoadmapOutlook'
                         }
+                    },
+                    {
+                        name: 'roadmapImageUrl'
+                        type: 'string'
+                    },
+                    {
+                        name: 'roadmapRepository'
+                        type: 'publicKey'
                     }
                 ]
             }
@@ -3138,20 +2793,20 @@ export type Defios = {
                     },
                     {
                         name: 'objectiveCreationUnix'
-                        type: 'u64'
+                        type: 'i64'
                     },
                     {
-                        name: 'objectiveCreatorGhId'
+                        name: 'objectiveCreatorId'
                         type: 'publicKey'
                     },
                     {
                         name: 'objectiveStartUnix'
-                        type: 'u64'
+                        type: 'i64'
                     },
                     {
                         name: 'objectiveEndUnix'
                         type: {
-                            option: 'u64'
+                            option: 'i64'
                         }
                     },
                     {
@@ -3183,6 +2838,10 @@ export type Defios = {
                     {
                         name: 'objectiveId'
                         type: 'string'
+                    },
+                    {
+                        name: 'objectiveRepository'
+                        type: 'publicKey'
                     }
                 ]
             }
@@ -3353,7 +3012,9 @@ export type Defios = {
             fields: [
                 {
                     name: 'commit'
-                    type: 'publicKey'
+                    type: {
+                        vec: 'publicKey'
+                    }
                     index: false
                 },
                 {
@@ -3367,13 +3028,20 @@ export type Defios = {
             name: 'AddChildObjectiveEvent'
             fields: [
                 {
-                    name: 'parentAccount'
+                    name: 'parentObjectiveAccount'
                     type: 'publicKey'
                     index: false
                 },
                 {
                     name: 'addedBy'
                     type: 'publicKey'
+                    index: false
+                },
+                {
+                    name: 'objectives'
+                    type: {
+                        vec: 'publicKey'
+                    }
                     index: false
                 }
             ]
@@ -3393,18 +3061,18 @@ export type Defios = {
                 },
                 {
                     name: 'objectiveStartUnix'
-                    type: 'u64'
+                    type: 'i64'
                     index: false
                 },
                 {
                     name: 'objectiveCreationUnix'
-                    type: 'u64'
+                    type: 'i64'
                     index: false
                 },
                 {
                     name: 'objectiveEndUnix'
                     type: {
-                        option: 'u64'
+                        option: 'i64'
                     }
                     index: false
                 },
@@ -3423,6 +3091,18 @@ export type Defios = {
                 {
                     name: 'objectiveIssue'
                     type: 'publicKey'
+                    index: false
+                },
+                {
+                    name: 'objectiveAddr'
+                    type: 'publicKey'
+                    index: false
+                },
+                {
+                    name: 'childObjectives'
+                    type: {
+                        vec: 'publicKey'
+                    }
                     index: false
                 }
             ]
@@ -3447,6 +3127,35 @@ export type Defios = {
                 },
                 {
                     name: 'roadmapCreator'
+                    type: 'publicKey'
+                    index: false
+                },
+                {
+                    name: 'rootObjectiveIds'
+                    type: {
+                        vec: 'publicKey'
+                    }
+                    index: false
+                },
+                {
+                    name: 'roadmapOutlook'
+                    type: {
+                        defined: 'RoadmapOutlook'
+                    }
+                    index: false
+                },
+                {
+                    name: 'roadmapImageUrl'
+                    type: 'string'
+                    index: false
+                },
+                {
+                    name: 'roadmap'
+                    type: 'publicKey'
+                    index: false
+                },
+                {
+                    name: 'roadmapRepository'
                     type: 'publicKey'
                     index: false
                 }
@@ -3488,6 +3197,11 @@ export type Defios = {
                 {
                     name: 'userName'
                     type: 'string'
+                    index: false
+                },
+                {
+                    name: 'userPubkey'
+                    type: 'publicKey'
                     index: false
                 }
             ]
@@ -3578,7 +3292,7 @@ export type Defios = {
                     index: false
                 },
                 {
-                    name: 'name'
+                    name: 'id'
                     type: 'string'
                     index: false
                 },
@@ -3595,7 +3309,7 @@ export type Defios = {
                     index: false
                 },
                 {
-                    name: 'tokenImage'
+                    name: 'tokenSymbol'
                     type: {
                         option: 'string'
                     }
@@ -3605,6 +3319,13 @@ export type Defios = {
                     name: 'tokenMetadataUri'
                     type: {
                         option: 'string'
+                    }
+                    index: false
+                },
+                {
+                    name: 'vestingAccount'
+                    type: {
+                        option: 'publicKey'
                     }
                     index: false
                 }
@@ -3939,6 +3660,21 @@ export type Defios = {
             code: 6020
             name: 'IncorrectMaths'
             msg: 'Incorrect Inputs for buy/sell given'
+        },
+        {
+            code: 6021
+            name: 'IncorrectMetadataAccount'
+            msg: 'Incorrect Metadata account provided'
+        },
+        {
+            code: 6022
+            name: 'PullRequestClosedAlready'
+            msg: 'Cannot unstake for a closed pull request'
+        },
+        {
+            code: 6023
+            name: 'CantAddObjectiveToSomebodiesRoadmap'
+            msg: 'Unauthorized objective addition'
         }
     ]
 }
@@ -4166,7 +3902,7 @@ export const IDL: Defios = {
                             {
                                 kind: 'arg',
                                 type: 'string',
-                                path: 'name',
+                                path: 'id',
                             },
                             {
                                 kind: 'account',
@@ -4234,6 +3970,12 @@ export const IDL: Defios = {
                     },
                 },
                 {
+                    name: 'metadata',
+                    isMut: true,
+                    isSigner: false,
+                    isOptional: true,
+                },
+                {
                     name: 'rewardsMint',
                     isMut: true,
                     isSigner: false,
@@ -4274,10 +4016,15 @@ export const IDL: Defios = {
                     isMut: false,
                     isSigner: false,
                 },
+                {
+                    name: 'tokenMetadataProgram',
+                    isMut: false,
+                    isSigner: false,
+                },
             ],
             args: [
                 {
-                    name: 'name',
+                    name: 'id',
                     type: 'string',
                 },
                 {
@@ -4393,7 +4140,7 @@ export const IDL: Defios = {
                                 kind: 'account',
                                 type: 'string',
                                 account: 'Repository',
-                                path: 'repository_account.name',
+                                path: 'repository_account.id',
                             },
                             {
                                 kind: 'account',
@@ -4495,7 +4242,7 @@ export const IDL: Defios = {
                                 kind: 'account',
                                 type: 'string',
                                 account: 'Repository',
-                                path: 'repository_account.name',
+                                path: 'repository_account.id',
                             },
                             {
                                 kind: 'account',
@@ -4624,7 +4371,7 @@ export const IDL: Defios = {
                                 kind: 'account',
                                 type: 'string',
                                 account: 'Repository',
-                                path: 'repository_account.name',
+                                path: 'repository_account.id',
                             },
                             {
                                 kind: 'account',
@@ -4774,7 +4521,7 @@ export const IDL: Defios = {
                                 kind: 'account',
                                 type: 'string',
                                 account: 'Repository',
-                                path: 'repository_account.name',
+                                path: 'repository_account.id',
                             },
                             {
                                 kind: 'account',
@@ -4941,63 +4688,6 @@ export const IDL: Defios = {
                     isSigner: false,
                 },
                 {
-                    name: 'routerCreator',
-                    isMut: true,
-                    isSigner: false,
-                },
-                {
-                    name: 'nameRouterAccount',
-                    isMut: false,
-                    isSigner: false,
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account',
-                                type: 'string',
-                                account: 'NameRouter',
-                                path: 'name_router_account.signing_domain',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'u8',
-                                account: 'NameRouter',
-                                path: 'name_router_account.signature_version',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                path: 'router_creator',
-                            },
-                        ],
-                    },
-                },
-                {
-                    name: 'pullRequestVerifiedUser',
-                    isMut: false,
-                    isSigner: false,
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account',
-                                type: 'string',
-                                account: 'VerifiedUser',
-                                path: 'pull_request_verified_user.user_name',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                path: 'pull_request_creator',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                account: 'NameRouter',
-                                path: 'name_router_account',
-                            },
-                        ],
-                    },
-                },
-                {
                     name: 'repositoryCreator',
                     isMut: false,
                     isSigner: false,
@@ -5022,7 +4712,7 @@ export const IDL: Defios = {
                                 kind: 'account',
                                 type: 'string',
                                 account: 'Repository',
-                                path: 'repository_account.name',
+                                path: 'repository_account.id',
                             },
                             {
                                 kind: 'account',
@@ -5125,6 +4815,32 @@ export const IDL: Defios = {
                     },
                 },
                 {
+                    name: 'repositoryAccount',
+                    isMut: true,
+                    isSigner: false,
+                    pda: {
+                        seeds: [
+                            {
+                                kind: 'const',
+                                type: 'string',
+                                value: 'repository',
+                            },
+                            {
+                                kind: 'account',
+                                type: 'string',
+                                account: 'Repository',
+                                path: 'repository_account.id',
+                            },
+                            {
+                                kind: 'account',
+                                type: 'publicKey',
+                                account: 'Repository',
+                                path: 'repository_account.repository_creator',
+                            },
+                        ],
+                    },
+                },
+                {
                     name: 'roadmapVerifiedUser',
                     isMut: false,
                     isSigner: false,
@@ -5197,6 +4913,10 @@ export const IDL: Defios = {
                     type: 'string',
                 },
                 {
+                    name: 'roadmapImageUrl',
+                    type: 'string',
+                },
+                {
                     name: 'roadmapOutlook',
                     type: {
                         defined: 'RoadmapOutlook',
@@ -5246,6 +4966,32 @@ export const IDL: Defios = {
                     name: 'objectiveIssue',
                     isMut: true,
                     isSigner: false,
+                },
+                {
+                    name: 'repositoryAccount',
+                    isMut: true,
+                    isSigner: false,
+                    pda: {
+                        seeds: [
+                            {
+                                kind: 'const',
+                                type: 'string',
+                                value: 'repository',
+                            },
+                            {
+                                kind: 'account',
+                                type: 'string',
+                                account: 'Repository',
+                                path: 'repository_account.id',
+                            },
+                            {
+                                kind: 'account',
+                                type: 'publicKey',
+                                account: 'Repository',
+                                path: 'repository_account.repository_creator',
+                            },
+                        ],
+                    },
                 },
                 {
                     name: 'objectiveVerifiedUser',
@@ -5321,12 +5067,12 @@ export const IDL: Defios = {
                 },
                 {
                     name: 'objectiveStartUnix',
-                    type: 'u64',
+                    type: 'i64',
                 },
                 {
                     name: 'objectiveEndUnix',
                     type: {
-                        option: 'u64',
+                        option: 'i64',
                     },
                 },
                 {
@@ -5356,72 +5102,10 @@ export const IDL: Defios = {
                     isOptional: true,
                 },
                 {
-                    name: 'objectiveAccount',
-                    isMut: true,
-                    isSigner: false,
-                },
-                {
-                    name: 'parentAccount',
+                    name: 'parentObjectiveAccount',
                     isMut: true,
                     isSigner: false,
                     isOptional: true,
-                },
-                {
-                    name: 'objectiveVerifiedUser',
-                    isMut: false,
-                    isSigner: false,
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account',
-                                type: 'string',
-                                account: 'VerifiedUser',
-                                path: 'objective_verified_user.user_name',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                path: 'child_objective_adder',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                account: 'NameRouter',
-                                path: 'name_router_account',
-                            },
-                        ],
-                    },
-                },
-                {
-                    name: 'nameRouterAccount',
-                    isMut: false,
-                    isSigner: false,
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account',
-                                type: 'string',
-                                account: 'NameRouter',
-                                path: 'name_router_account.signing_domain',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'u8',
-                                account: 'NameRouter',
-                                path: 'name_router_account.signature_version',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                path: 'router_creator',
-                            },
-                        ],
-                    },
-                },
-                {
-                    name: 'routerCreator',
-                    isMut: false,
-                    isSigner: false,
                 },
                 {
                     name: 'systemProgram',
@@ -5442,11 +5126,6 @@ export const IDL: Defios = {
                 {
                     name: 'issue',
                     isMut: true,
-                    isSigner: false,
-                },
-                {
-                    name: 'commit',
-                    isMut: false,
                     isSigner: false,
                 },
                 {
@@ -5573,70 +5252,8 @@ export const IDL: Defios = {
                     isSigner: true,
                 },
                 {
-                    name: 'commit',
-                    isMut: false,
-                    isSigner: false,
-                },
-                {
                     name: 'pullRequestMetadataAccount',
                     isMut: true,
-                    isSigner: false,
-                },
-                {
-                    name: 'commitVerifiedUser',
-                    isMut: false,
-                    isSigner: false,
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account',
-                                type: 'string',
-                                account: 'VerifiedUser',
-                                path: 'commit_verified_user.user_name',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                path: 'commit_addr',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                account: 'NameRouter',
-                                path: 'name_router_account',
-                            },
-                        ],
-                    },
-                },
-                {
-                    name: 'nameRouterAccount',
-                    isMut: false,
-                    isSigner: false,
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account',
-                                type: 'string',
-                                account: 'NameRouter',
-                                path: 'name_router_account.signing_domain',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'u8',
-                                account: 'NameRouter',
-                                path: 'name_router_account.signature_version',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                path: 'router_creator',
-                            },
-                        ],
-                    },
-                },
-                {
-                    name: 'routerCreator',
-                    isMut: false,
                     isSigner: false,
                 },
                 {
@@ -5654,63 +5271,6 @@ export const IDL: Defios = {
                     name: 'repositoryCreator',
                     isMut: true,
                     isSigner: true,
-                },
-                {
-                    name: 'repositoryVerifiedUser',
-                    isMut: false,
-                    isSigner: false,
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account',
-                                type: 'string',
-                                account: 'VerifiedUser',
-                                path: 'repository_verified_user.user_name',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                path: 'repository_creator',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                account: 'NameRouter',
-                                path: 'name_router_account',
-                            },
-                        ],
-                    },
-                },
-                {
-                    name: 'nameRouterAccount',
-                    isMut: false,
-                    isSigner: false,
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account',
-                                type: 'string',
-                                account: 'NameRouter',
-                                path: 'name_router_account.signing_domain',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'u8',
-                                account: 'NameRouter',
-                                path: 'name_router_account.signature_version',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                path: 'router_creator',
-                            },
-                        ],
-                    },
-                },
-                {
-                    name: 'routerCreator',
-                    isMut: false,
-                    isSigner: false,
                 },
                 {
                     name: 'repositoryCreatorTokenAccount',
@@ -5734,9 +5294,10 @@ export const IDL: Defios = {
                                 value: 'repository',
                             },
                             {
-                                kind: 'arg',
+                                kind: 'account',
                                 type: 'string',
-                                path: 'repo_name',
+                                account: 'Repository',
+                                path: 'repository_account.id',
                             },
                             {
                                 kind: 'account',
@@ -5782,12 +5343,7 @@ export const IDL: Defios = {
                     isSigner: false,
                 },
             ],
-            args: [
-                {
-                    name: 'repoName',
-                    type: 'string',
-                },
-            ],
+            args: [],
         },
         {
             name: 'acceptPr',
@@ -5796,32 +5352,6 @@ export const IDL: Defios = {
                     name: 'repositoryCreator',
                     isMut: true,
                     isSigner: true,
-                },
-                {
-                    name: 'repositoryVerifiedUser',
-                    isMut: false,
-                    isSigner: false,
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account',
-                                type: 'string',
-                                account: 'VerifiedUser',
-                                path: 'repository_verified_user.user_name',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                path: 'repository_creator',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                account: 'NameRouter',
-                                path: 'name_router_account',
-                            },
-                        ],
-                    },
                 },
                 {
                     name: 'pullRequestAddr',
@@ -5881,63 +5411,6 @@ export const IDL: Defios = {
                             },
                         ],
                     },
-                },
-                {
-                    name: 'pullRequestVerifiedUser',
-                    isMut: false,
-                    isSigner: false,
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account',
-                                type: 'string',
-                                account: 'VerifiedUser',
-                                path: 'pull_request_verified_user.user_name',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                path: 'pull_request_addr',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                account: 'NameRouter',
-                                path: 'name_router_account',
-                            },
-                        ],
-                    },
-                },
-                {
-                    name: 'nameRouterAccount',
-                    isMut: false,
-                    isSigner: false,
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account',
-                                type: 'string',
-                                account: 'NameRouter',
-                                path: 'name_router_account.signing_domain',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'u8',
-                                account: 'NameRouter',
-                                path: 'name_router_account.signature_version',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                path: 'router_creator',
-                            },
-                        ],
-                    },
-                },
-                {
-                    name: 'routerCreator',
-                    isMut: false,
-                    isSigner: false,
                 },
                 {
                     name: 'systemProgram',
@@ -6046,7 +5519,17 @@ export const IDL: Defios = {
                     isSigner: false,
                 },
                 {
+                    name: 'communalUsdcAccount',
+                    isMut: true,
+                    isSigner: false,
+                },
+                {
                     name: 'rewardsMint',
+                    isMut: false,
+                    isSigner: false,
+                },
+                {
+                    name: 'usdcMint',
                     isMut: false,
                     isSigner: false,
                 },
@@ -6112,7 +5595,17 @@ export const IDL: Defios = {
                     isSigner: false,
                 },
                 {
+                    name: 'communalUsdcAccount',
+                    isMut: true,
+                    isSigner: false,
+                },
+                {
                     name: 'buyerTokenAccount',
+                    isMut: true,
+                    isSigner: false,
+                },
+                {
+                    name: 'buyerUsdcAccount',
                     isMut: true,
                     isSigner: false,
                 },
@@ -6152,6 +5645,35 @@ export const IDL: Defios = {
                     },
                 },
                 {
+                    name: 'usdcMint',
+                    isMut: false,
+                    isSigner: false,
+                },
+                {
+                    name: 'defaultSchedule',
+                    isMut: false,
+                    isSigner: false,
+                    pda: {
+                        seeds: [
+                            {
+                                kind: 'const',
+                                type: 'string',
+                                value: 'isGodReal?',
+                            },
+                            {
+                                kind: 'const',
+                                type: 'string',
+                                value: 'DoULoveMe?',
+                            },
+                            {
+                                kind: 'const',
+                                type: 'string',
+                                value: 'SweetChick',
+                            },
+                        ],
+                    },
+                },
+                {
                     name: 'associatedTokenProgram',
                     isMut: false,
                     isSigner: false,
@@ -6164,7 +5686,7 @@ export const IDL: Defios = {
             ],
             args: [
                 {
-                    name: 'lamportsAmount',
+                    name: 'usdcAmount',
                     type: 'u64',
                 },
                 {
@@ -6217,12 +5739,22 @@ export const IDL: Defios = {
                     isSigner: false,
                 },
                 {
+                    name: 'communalUsdcAccount',
+                    isMut: true,
+                    isSigner: false,
+                },
+                {
                     name: 'sellerTokenAccount',
                     isMut: true,
                     isSigner: false,
                 },
                 {
                     name: 'repositoryAccount',
+                    isMut: true,
+                    isSigner: false,
+                },
+                {
+                    name: 'sellerUsdcAccount',
                     isMut: true,
                     isSigner: false,
                 },
@@ -6257,6 +5789,35 @@ export const IDL: Defios = {
                     },
                 },
                 {
+                    name: 'usdcMint',
+                    isMut: false,
+                    isSigner: false,
+                },
+                {
+                    name: 'defaultSchedule',
+                    isMut: false,
+                    isSigner: false,
+                    pda: {
+                        seeds: [
+                            {
+                                kind: 'const',
+                                type: 'string',
+                                value: 'isGodReal?',
+                            },
+                            {
+                                kind: 'const',
+                                type: 'string',
+                                value: 'DoULoveMe?',
+                            },
+                            {
+                                kind: 'const',
+                                type: 'string',
+                                value: 'SweetChick',
+                            },
+                        ],
+                    },
+                },
+                {
                     name: 'associatedTokenProgram',
                     isMut: false,
                     isSigner: false,
@@ -6269,7 +5830,7 @@ export const IDL: Defios = {
             ],
             args: [
                 {
-                    name: 'lamportsAmount',
+                    name: 'usdcAmount',
                     type: 'u64',
                 },
                 {
@@ -6332,70 +5893,6 @@ export const IDL: Defios = {
             ],
         },
         {
-            name: 'createSplToken',
-            accounts: [
-                {
-                    name: 'metadata',
-                    isMut: true,
-                    isSigner: false,
-                },
-                {
-                    name: 'mint',
-                    isMut: true,
-                    isSigner: true,
-                },
-                {
-                    name: 'tokenAccount',
-                    isMut: true,
-                    isSigner: false,
-                },
-                {
-                    name: 'mintAuthority',
-                    isMut: true,
-                    isSigner: true,
-                },
-                {
-                    name: 'rent',
-                    isMut: false,
-                    isSigner: false,
-                },
-                {
-                    name: 'systemProgram',
-                    isMut: false,
-                    isSigner: false,
-                },
-                {
-                    name: 'tokenProgram',
-                    isMut: false,
-                    isSigner: false,
-                },
-                {
-                    name: 'associatedTokenProgram',
-                    isMut: false,
-                    isSigner: false,
-                },
-                {
-                    name: 'tokenMetadataProgram',
-                    isMut: false,
-                    isSigner: false,
-                },
-            ],
-            args: [
-                {
-                    name: 'metadataTitle',
-                    type: 'string',
-                },
-                {
-                    name: 'metadataSymbol',
-                    type: 'string',
-                },
-                {
-                    name: 'metadataUri',
-                    type: 'string',
-                },
-            ],
-        },
-        {
             name: 'stakePr',
             accounts: [
                 {
@@ -6434,32 +5931,6 @@ export const IDL: Defios = {
                     },
                 },
                 {
-                    name: 'pullRequestVerifiedUser',
-                    isMut: false,
-                    isSigner: false,
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account',
-                                type: 'string',
-                                account: 'VerifiedUser',
-                                path: 'pull_request_verified_user.user_name',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                path: 'pull_request_addr',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                account: 'NameRouter',
-                                path: 'name_router_account',
-                            },
-                        ],
-                    },
-                },
-                {
                     name: 'pullRequestTokenAccount',
                     isMut: true,
                     isSigner: false,
@@ -6472,37 +5943,6 @@ export const IDL: Defios = {
                 {
                     name: 'pullRequestStakerTokenAccount',
                     isMut: true,
-                    isSigner: false,
-                },
-                {
-                    name: 'nameRouterAccount',
-                    isMut: false,
-                    isSigner: false,
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account',
-                                type: 'string',
-                                account: 'NameRouter',
-                                path: 'name_router_account.signing_domain',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'u8',
-                                account: 'NameRouter',
-                                path: 'name_router_account.signature_version',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                path: 'router_creator',
-                            },
-                        ],
-                    },
-                },
-                {
-                    name: 'routerCreator',
-                    isMut: false,
                     isSigner: false,
                 },
                 {
@@ -6597,32 +6037,6 @@ export const IDL: Defios = {
                     },
                 },
                 {
-                    name: 'pullRequestVerifiedUser',
-                    isMut: false,
-                    isSigner: false,
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account',
-                                type: 'string',
-                                account: 'VerifiedUser',
-                                path: 'pull_request_verified_user.user_name',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                path: 'pull_request_addr',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                account: 'NameRouter',
-                                path: 'name_router_account',
-                            },
-                        ],
-                    },
-                },
-                {
                     name: 'pullRequestTokenAccount',
                     isMut: true,
                     isSigner: false,
@@ -6635,37 +6049,6 @@ export const IDL: Defios = {
                 {
                     name: 'pullRequestStakerTokenAccount',
                     isMut: true,
-                    isSigner: false,
-                },
-                {
-                    name: 'nameRouterAccount',
-                    isMut: false,
-                    isSigner: false,
-                    pda: {
-                        seeds: [
-                            {
-                                kind: 'account',
-                                type: 'string',
-                                account: 'NameRouter',
-                                path: 'name_router_account.signing_domain',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'u8',
-                                account: 'NameRouter',
-                                path: 'name_router_account.signature_version',
-                            },
-                            {
-                                kind: 'account',
-                                type: 'publicKey',
-                                path: 'router_creator',
-                            },
-                        ],
-                    },
-                },
-                {
-                    name: 'routerCreator',
-                    isMut: false,
                     isSigner: false,
                 },
                 {
@@ -6798,7 +6181,7 @@ export const IDL: Defios = {
                         },
                     },
                     {
-                        name: 'name',
+                        name: 'id',
                         type: 'string',
                     },
                     {
@@ -6971,7 +6354,9 @@ export const IDL: Defios = {
                     },
                     {
                         name: 'stakedAt',
-                        type: 'u64',
+                        type: {
+                            vec: 'u64',
+                        },
                     },
                     {
                         name: 'issueStaker',
@@ -7003,7 +6388,9 @@ export const IDL: Defios = {
                     },
                     {
                         name: 'stakedAt',
-                        type: 'u64',
+                        type: {
+                            vec: 'u64',
+                        },
                     },
                     {
                         name: 'prStaker',
@@ -7035,7 +6422,7 @@ export const IDL: Defios = {
                     },
                     {
                         name: 'roadmapCreationUnix',
-                        type: 'u64',
+                        type: 'i64',
                     },
                     {
                         name: 'roadmapCreatorId',
@@ -7044,10 +6431,6 @@ export const IDL: Defios = {
                     {
                         name: 'roadmapDescriptionLink',
                         type: 'string',
-                    },
-                    {
-                        name: 'numberOfObjectives',
-                        type: 'u64',
                     },
                     {
                         name: 'rootObjectiveIds',
@@ -7064,6 +6447,14 @@ export const IDL: Defios = {
                         type: {
                             defined: 'RoadmapOutlook',
                         },
+                    },
+                    {
+                        name: 'roadmapImageUrl',
+                        type: 'string',
+                    },
+                    {
+                        name: 'roadmapRepository',
+                        type: 'publicKey',
                     },
                 ],
             },
@@ -7083,20 +6474,20 @@ export const IDL: Defios = {
                     },
                     {
                         name: 'objectiveCreationUnix',
-                        type: 'u64',
+                        type: 'i64',
                     },
                     {
-                        name: 'objectiveCreatorGhId',
+                        name: 'objectiveCreatorId',
                         type: 'publicKey',
                     },
                     {
                         name: 'objectiveStartUnix',
-                        type: 'u64',
+                        type: 'i64',
                     },
                     {
                         name: 'objectiveEndUnix',
                         type: {
-                            option: 'u64',
+                            option: 'i64',
                         },
                     },
                     {
@@ -7128,6 +6519,10 @@ export const IDL: Defios = {
                     {
                         name: 'objectiveId',
                         type: 'string',
+                    },
+                    {
+                        name: 'objectiveRepository',
+                        type: 'publicKey',
                     },
                 ],
             },
@@ -7298,7 +6693,9 @@ export const IDL: Defios = {
             fields: [
                 {
                     name: 'commit',
-                    type: 'publicKey',
+                    type: {
+                        vec: 'publicKey',
+                    },
                     index: false,
                 },
                 {
@@ -7312,13 +6709,20 @@ export const IDL: Defios = {
             name: 'AddChildObjectiveEvent',
             fields: [
                 {
-                    name: 'parentAccount',
+                    name: 'parentObjectiveAccount',
                     type: 'publicKey',
                     index: false,
                 },
                 {
                     name: 'addedBy',
                     type: 'publicKey',
+                    index: false,
+                },
+                {
+                    name: 'objectives',
+                    type: {
+                        vec: 'publicKey',
+                    },
                     index: false,
                 },
             ],
@@ -7338,18 +6742,18 @@ export const IDL: Defios = {
                 },
                 {
                     name: 'objectiveStartUnix',
-                    type: 'u64',
+                    type: 'i64',
                     index: false,
                 },
                 {
                     name: 'objectiveCreationUnix',
-                    type: 'u64',
+                    type: 'i64',
                     index: false,
                 },
                 {
                     name: 'objectiveEndUnix',
                     type: {
-                        option: 'u64',
+                        option: 'i64',
                     },
                     index: false,
                 },
@@ -7368,6 +6772,18 @@ export const IDL: Defios = {
                 {
                     name: 'objectiveIssue',
                     type: 'publicKey',
+                    index: false,
+                },
+                {
+                    name: 'objectiveAddr',
+                    type: 'publicKey',
+                    index: false,
+                },
+                {
+                    name: 'childObjectives',
+                    type: {
+                        vec: 'publicKey',
+                    },
                     index: false,
                 },
             ],
@@ -7392,6 +6808,35 @@ export const IDL: Defios = {
                 },
                 {
                     name: 'roadmapCreator',
+                    type: 'publicKey',
+                    index: false,
+                },
+                {
+                    name: 'rootObjectiveIds',
+                    type: {
+                        vec: 'publicKey',
+                    },
+                    index: false,
+                },
+                {
+                    name: 'roadmapOutlook',
+                    type: {
+                        defined: 'RoadmapOutlook',
+                    },
+                    index: false,
+                },
+                {
+                    name: 'roadmapImageUrl',
+                    type: 'string',
+                    index: false,
+                },
+                {
+                    name: 'roadmap',
+                    type: 'publicKey',
+                    index: false,
+                },
+                {
+                    name: 'roadmapRepository',
                     type: 'publicKey',
                     index: false,
                 },
@@ -7433,6 +6878,11 @@ export const IDL: Defios = {
                 {
                     name: 'userName',
                     type: 'string',
+                    index: false,
+                },
+                {
+                    name: 'userPubkey',
+                    type: 'publicKey',
                     index: false,
                 },
             ],
@@ -7523,7 +6973,7 @@ export const IDL: Defios = {
                     index: false,
                 },
                 {
-                    name: 'name',
+                    name: 'id',
                     type: 'string',
                     index: false,
                 },
@@ -7540,7 +6990,7 @@ export const IDL: Defios = {
                     index: false,
                 },
                 {
-                    name: 'tokenImage',
+                    name: 'tokenSymbol',
                     type: {
                         option: 'string',
                     },
@@ -7550,6 +7000,13 @@ export const IDL: Defios = {
                     name: 'tokenMetadataUri',
                     type: {
                         option: 'string',
+                    },
+                    index: false,
+                },
+                {
+                    name: 'vestingAccount',
+                    type: {
+                        option: 'publicKey',
                     },
                     index: false,
                 },
@@ -7884,6 +7341,21 @@ export const IDL: Defios = {
             code: 6020,
             name: 'IncorrectMaths',
             msg: 'Incorrect Inputs for buy/sell given',
+        },
+        {
+            code: 6021,
+            name: 'IncorrectMetadataAccount',
+            msg: 'Incorrect Metadata account provided',
+        },
+        {
+            code: 6022,
+            name: 'PullRequestClosedAlready',
+            msg: 'Cannot unstake for a closed pull request',
+        },
+        {
+            code: 6023,
+            name: 'CantAddObjectiveToSomebodiesRoadmap',
+            msg: 'Unauthorized objective addition',
         },
     ],
 }

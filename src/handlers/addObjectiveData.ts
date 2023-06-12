@@ -13,12 +13,12 @@ export const addObjectiveData = async (objective: IAddObjectiveDataEvent) => {
                 reject('User not found')
                 return
             }
-            let objective_end:BN|null = null
-            if(objective.objectiveEndUnix){
+            let objective_end: BN | null = null
+            if (objective.objectiveEndUnix) {
                 objective_end = objective.objectiveEndUnix
             }
             let children: Array<String> = []
-            for(var child_objectives in objective.childObjectives){
+            for (var child_objectives in objective.childObjectives) {
                 children.push(child_objectives.toString())
             }
             const new_objective = new RoadmapObjective({
@@ -27,9 +27,9 @@ export const addObjectiveData = async (objective: IAddObjectiveDataEvent) => {
                 objective_creation_date: objective.objectiveCreationUnix,
                 objective_start_date: objective.objectiveStartUnix,
                 objective_end_date: objective_end,
-                objective_state:'InProgress',
+                objective_state: 'InProgress',
                 objective_creator_gh_name: user.user_gh_name,
-                objective_creator_gh_profile_pic: user.user_profile_pic
+                objective_creator_gh_profile_pic: user.user_profile_pic,
             })
             new_objective.save()
             resolve('Objective Created')

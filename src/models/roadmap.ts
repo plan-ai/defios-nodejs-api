@@ -52,7 +52,7 @@ export const RoadmapObjectiveSchema = new mongoose.Schema<RoadmapObjective>(
         },
         objective_creation_date: {
             type: mongoose.Schema.Types.Date,
-            set: (d: number) => new Date(d * 1000)
+            set: (d: number) => new Date(d * 1000),
         },
         objective_creator_gh_name: {
             type: mongoose.Schema.Types.String,
