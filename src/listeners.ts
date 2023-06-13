@@ -3,7 +3,7 @@ import { Defios } from '../type-file/defios'
 import {
     IPullRequestSent,
     IAddCommitToPR,
-    IAddChildObjective,
+    IAddChildObjectiveEvent,
     IAddObjectiveDataEvent,
     IAddRoadmapDataEvent,
     INameRouterCreated,
@@ -105,7 +105,7 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
 
     //New Listeners
     program.addEventListener(
-        'ObjectiveDataAdded',
+        'AddObjectiveDataEvent',
         (res: IAddObjectiveDataEvent) => {
             addObjectiveData(res)
                 .then(() => {
@@ -118,7 +118,7 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
     )
 
     program.addEventListener(
-        'RoadmapDataAdded',
+        'AddRoadmapDataEvent',
         (res: IAddRoadmapDataEvent) => {
             console.log(res)
             addRoadmapData(res)
@@ -132,8 +132,8 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
     )
 
     program.addEventListener(
-        'ChildObjectiveAdded',
-        (res: IAddChildObjective) => {
+        'AddChildObjectiveEvent',
+        (res: IAddChildObjectiveEvent) => {
             addChildObjective(res)
                 .then(() => {
                     console.log('ChildObjectiveAdded')

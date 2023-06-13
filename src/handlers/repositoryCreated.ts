@@ -21,7 +21,7 @@ export const repositoryCreated = async (res: IRepositoryCreated) => {
                         console.log(res)
                         const token = new Token({
                             token_spl_addr: tokenAddress.toBase58(),
-                            token_symbol: res.tokenImage,
+                            token_symbol: res.tokenSymbol,
                             token_name: res.tokenName,
                             token_image_url: response.data.image,
                         })
@@ -36,7 +36,7 @@ export const repositoryCreated = async (res: IRepositoryCreated) => {
                         }
                         const project = new Project({
                             project_account: res.repositoryAccount.toString(),
-                            project_name: res.name,
+                            project_name: res.id,
                             num_contributions: 0,
                             num_contributions_chg_perc: 0,
                             num_open_issues: 0,
@@ -59,7 +59,7 @@ export const repositoryCreated = async (res: IRepositoryCreated) => {
                 }
                 const project = new Project({
                     project_account: res.repositoryAccount.toString(),
-                    project_name: res.name,
+                    project_name: res.id,
                     num_contributions: 0,
                     num_contributions_chg_perc: 0,
                     num_open_issues: 0,

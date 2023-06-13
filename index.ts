@@ -40,7 +40,7 @@ const PROGRAM_ID = new web3.PublicKey(process.env.DEFIOS_PROGRAM_ID as string)
 
 let authSecretKey = bs58.decode(process.env.AUTH_KEY as string)
 let authKeyPair = web3.Keypair.fromSecretKey(authSecretKey)
-const usdcMint = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+const usdcMint = new PublicKey('2wmVCSfPxGPjrnMMn7rchp4uaeoTqN39mXFC2zhPdri9')
 console.log(`Authorised creator: ${authKeyPair.publicKey.toString()}`)
 anchor.setProvider(anchor.AnchorProvider.env())
 const program = new anchor.Program(IDL, PROGRAM_ID) as Program<Defios>

@@ -19,8 +19,17 @@ export const addRoadmapData = async (roadmap: IAddRoadmapDataEvent) => {
                 })
                 objective_list.push(objective_object)
             }
+            const outlook =
+                Object.keys(roadmap.roadmapOutlook)[0] === 'next2'
+                    ? 'Next 2 Years'
+                    : Object.keys(roadmap.roadmapOutlook)[0] === 'next5'
+                    ? 'Next 5 Years'
+                    : Object.keys(roadmap.roadmapOutlook)[0] === 'plus5'
+                    ? 'More than 5 Yrs'
+                    : 'Long-Term Public Good'
+
             const new_roadmap = new Roadmap({
-                roadmap: roadmap.roadmap.toString(),
+                roadmap_key: roadmap.roadmap.toString(),
                 roadmap_title: roadmap.roadmapTitle,
                 roadmap_description: roadmap.roadmapDescriptionLink,
                 roadmap_creation_date: roadmap.roadmapCreationUnix,
@@ -29,7 +38,9 @@ export const addRoadmapData = async (roadmap: IAddRoadmapDataEvent) => {
                 roadmap_creator_gh_name: user.user_gh_name,
                 roadmap_cover_img_url: roadmap.roadmapImageUrl,
                 roadmap_objectives_list: objective_list,
+                roadmap_outlook: outlook,
             })
+
             new_roadmap.save()
             resolve('Roadmap Created')
         } catch (err) {

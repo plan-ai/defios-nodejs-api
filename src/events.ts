@@ -79,10 +79,10 @@ export interface IRepositoryCreated {
     repositoryAccount: PublicKey
     rewardsMint?: PublicKey
     uri: String
-    name: String
+    id: String
     description: String
     tokenName?: String
-    tokenImage?: String
+    tokenSymbol?: String
     tokenMetadataUri?: String
 }
 
