@@ -13,6 +13,7 @@ export interface IToken {
     token_creator_name: mongoose.Schema.Types.String
     token_creation_date: mongoose.Schema.Types.Date
     token_repository_url: mongoose.Schema.Types.String
+    token_new: mongoose.Schema.Types.Boolean
 }
 
 export const TokenSchema = new mongoose.Schema<IToken>(
@@ -54,6 +55,9 @@ export const TokenSchema = new mongoose.Schema<IToken>(
         },
         token_repository_url: {
             type: mongoose.Schema.Types.String,
+        },
+        token_new: {
+            type: mongoose.Schema.Types.Boolean,
         },
     },
     { versionKey: false }
