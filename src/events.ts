@@ -84,6 +84,7 @@ export interface IRepositoryCreated {
     tokenName?: String
     tokenSymbol?: String
     tokenMetadataUri?: String
+    vestingAccount?: PublicKey
 }
 
 export interface IIssueStaked {
