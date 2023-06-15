@@ -23,7 +23,7 @@ export const repositoryCreated = async (res: IRepositoryCreated) => {
                     .then(async (response) => {
                         const tokenAddress = res.rewardsMint.toBase58()
                         let repo_token = await Token.findOne({
-                            token_spl_addr: tokenAddress,
+                            token_symbol: res.tokenSymbol,
                         })
                         if (!repo_token) {
                             const token = new Token({

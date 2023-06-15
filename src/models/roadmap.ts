@@ -8,7 +8,7 @@ export interface Roadmap {
     roadmap_cover_img_url: mongoose.Schema.Types.String
     roadmap_active_objectives: mongoose.Schema.Types.Number
     roadmap_objectives_list: RoadmapObjective[]
-    roadmap_objectives_graph: Object
+    roadmap_objectives_graph: string[]
     roadmap_creation_date: mongoose.Schema.Types.Date
     roadmap_title: mongoose.Schema.Types.String
     roadmap_description: mongoose.Schema.Types.String
@@ -106,7 +106,7 @@ export const RoadmapSchema = new mongoose.Schema<Roadmap>(
             type: [RoadmapObjectiveSchema],
         },
         roadmap_objectives_graph: {
-            type: Object,
+            type: [mongoose.Schema.Types.String],
         },
         roadmap_creation_date: {
             type: mongoose.Schema.Types.Date,

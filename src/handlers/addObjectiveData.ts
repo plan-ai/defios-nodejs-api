@@ -6,6 +6,7 @@ import { BN } from '@project-serum/anchor'
 export const addObjectiveData = async (objective: IAddObjectiveDataEvent) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log('objective: ', objective)
             const user = await User.findOne({
                 user_phantom_address: objective.objectiveAddr.toString(),
             })
