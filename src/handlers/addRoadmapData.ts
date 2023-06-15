@@ -1,5 +1,6 @@
 import { IAddRoadmapDataEvent } from '../events'
 import { Roadmap, RoadmapObjective } from '../models/roadmap'
+import { Project } from '../models/project'
 import { User } from '../models/users'
 
 export const addRoadmapData = async (roadmap: IAddRoadmapDataEvent) => {
@@ -8,8 +9,15 @@ export const addRoadmapData = async (roadmap: IAddRoadmapDataEvent) => {
             const user = await User.findOne({
                 user_phantom_address: roadmap.roadmapCreator.toString(),
             })
+            const reposiotry = await Project.findOne({
+                project_account: roadmap.roadmapRepository.toString(),
+            })
             if (!user) {
                 reject('User not found')
+                return
+            }
+            if (!reposiotry) {
+                reject('Project not found')
                 return
             }
             let objective_list: Array<RoadmapObjective> = []
@@ -39,6 +47,7 @@ export const addRoadmapData = async (roadmap: IAddRoadmapDataEvent) => {
                 roadmap_cover_img_url: roadmap.roadmapImageUrl,
                 roadmap_objectives_list: objective_list,
                 roadmap_outlook: outlook,
+                roadmap_project: reposiotry.id,
             })
 
             new_roadmap.save()

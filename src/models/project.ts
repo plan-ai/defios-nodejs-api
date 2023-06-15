@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import { IToken, Token } from './token'
 
 interface IProject {
     project_account: mongoose.Schema.Types.String

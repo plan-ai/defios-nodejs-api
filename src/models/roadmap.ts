@@ -17,6 +17,7 @@ export interface Roadmap {
         | 'Long-Term Public Good'
         | 'Next 5 Yrs'
         | 'More than 5 Yrs'
+    roadmap_project: mongoose.Schema.Types.ObjectId
 }
 
 export interface RoadmapObjective {
@@ -121,6 +122,10 @@ export const RoadmapSchema = new mongoose.Schema<Roadmap>(
             type: mongoose.Schema.Types.String,
             required: true,
             default: 'Next 2 Yrs',
+        },
+        roadmap_project: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Projects',
         },
     },
     { versionKey: false }
