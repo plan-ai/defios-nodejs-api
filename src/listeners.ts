@@ -133,7 +133,11 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
 
     program.addEventListener(
         'AddChildObjectiveEvent',
-        (res: IAddChildObjectiveEvent) => {
+        (
+            res
+            // : IAddChildObjectiveEvent
+        ) => {
+            console.log(res)
             addChildObjective(res)
                 .then(() => {
                     console.log('ChildObjectiveAdded')
