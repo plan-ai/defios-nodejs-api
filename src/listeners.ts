@@ -120,7 +120,6 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
     program.addEventListener(
         'AddRoadmapDataEvent',
         (res: IAddRoadmapDataEvent) => {
-            console.log(res)
             addRoadmapData(res)
                 .then(() => {
                     console.log('RoadmapDataAdded')
@@ -133,11 +132,7 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
 
     program.addEventListener(
         'AddChildObjectiveEvent',
-        (
-            res
-            // : IAddChildObjectiveEvent
-        ) => {
-            console.log(res)
+        (res: IAddChildObjectiveEvent) => {
             addChildObjective(res)
                 .then(() => {
                     console.log('ChildObjectiveAdded')
