@@ -1,5 +1,6 @@
 import * as express from 'express'
 import { Express, Request, Response } from 'express'
+import { User } from './src/models/users'
 import * as ed from '@noble/ed25519'
 import * as anchor from '@project-serum/anchor'
 import { Program } from '@project-serum/anchor'
@@ -205,6 +206,17 @@ const addUser = async (github_uid: string, user_public_key: string) => {
             console.log('Creating New Account')
         })
     if (data && data != undefined) {
+        const verifiedUser: any = await User.findOne({
+            user_github: userName,
+        })
+        if (
+            verifiedUser.user_phantom_address === undefined ||
+            verifiedUser.user_phantom_address === null ||
+            verifiedUser.user_phantom_address === ''
+        ) {
+            ;(verifiedUser.user_phantom_address = userPubkey.toString()),
+                verifiedUser.save()
+        }
         return { ...data, verifiedUserAccount: verifiedUserAccount }
     }
 
@@ -245,6 +257,19 @@ const addUser = async (github_uid: string, user_public_key: string) => {
         verifiedUserAccount
     )
     if (verifiedData && verifiedData != undefined) {
+        const verifiedUser: any = await User.findOne({
+            user_github: userName,
+        })
+        if (verifiedUser !== null && verifiedUser !== undefined) {
+            if (
+                verifiedUser.user_phantom_address === undefined ||
+                verifiedUser.user_phantom_address === null ||
+                verifiedUser.user_phantom_address === ''
+            ) {
+                ;(verifiedUser.user_phantom_address = userPubkey.toString()),
+                    verifiedUser.save()
+            }
+        }
         return { ...verifiedData, verifiedUserAccount: verifiedUserAccount }
     }
     return false

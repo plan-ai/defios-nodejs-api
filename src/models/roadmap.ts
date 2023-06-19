@@ -23,6 +23,8 @@ export interface RoadmapObjective {
     roadmap: mongoose.Schema.Types.String
     objective_key: mongoose.Schema.Types.String
     objective_title: mongoose.Schema.Types.String
+    objective_description: mongoose.Schema.Types.String
+    objective_issue_account: mongoose.Schema.Types.String
     objective_creation_date: mongoose.Schema.Types.Date
     objective_creator_gh_name: mongoose.Schema.Types.String
     objective_creator_gh_profile_pic: mongoose.Schema.Types.String
@@ -47,6 +49,13 @@ export const RoadmapObjectiveSchema = new mongoose.Schema<RoadmapObjective>(
             required: true,
         },
         objective_title: {
+            type: mongoose.Schema.Types.String,
+            required: true,
+        },
+        objective_description: {
+            type: mongoose.Schema.Types.String,
+        },
+        objective_issue_account: {
             type: mongoose.Schema.Types.String,
             required: true,
         },

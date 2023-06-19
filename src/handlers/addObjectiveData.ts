@@ -21,6 +21,13 @@ export const addObjectiveData = async (objective: IAddObjectiveDataEvent) => {
             for (var child_objectives in objective.childObjectives) {
                 children.push(child_objectives.toString())
             }
+
+            const objDeliverable =
+                Object.keys(objective.objectiveDeliverable)[0]
+                    .charAt(0)
+                    .toUpperCase() +
+                Object.keys(objective.objectiveDeliverable)[0].slice(1)
+
             const new_objective = new RoadmapObjective({
                 objective_key: objective.objectivePublicKey.toString(),
                 objective_title: objective.objectiveTitle,
@@ -30,6 +37,9 @@ export const addObjectiveData = async (objective: IAddObjectiveDataEvent) => {
                 objective_state: 'InProgress',
                 objective_creator_gh_name: user.user_gh_name,
                 objective_creator_gh_profile_pic: user.user_profile_pic,
+                objective_description: objective.objectiveMetadataUri,
+                objective_issue_account: objective.objectiveIssue.toString(),
+                objective_deliverable: objDeliverable,
             })
             new_objective.save()
             resolve('Objective Created')
