@@ -57,9 +57,29 @@ export const repositoryCreated = async (res: IRepositoryCreated) => {
                         })
                         project.save()
                         resolve('Repository Creation Successfull')
+                    })}
+                else{
+                    const user = await User.findOne({
+                        user_phantom_address:
+                            res.repositoryCreator.toString(),
                     })
-                    .catch((err) => reject(err))
-            }
+                    if (!user) {
+                        reject('User not found')
+                        return
+                    }
+                    const project = new Project({
+                        project_account: res.repositoryAccount.toString(),
+                        project_name: res.id,
+                        num_contributions: 0,
+                        num_contributions_chg_perc: 0,
+                        num_open_issues: 0,
+                        community_health: 0,
+                        project_repo_link: res.uri,
+                        project_owner_github: user.user_github,
+                    })
+                    project.save()
+                    resolve('Repository Creation Successfull')
+                }
         } catch (err) {
             reject(err)
         }
