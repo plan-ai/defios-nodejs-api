@@ -25,7 +25,7 @@ export const issueCreated = async (res: IIssueCreated) => {
             reject('Token not found')
             return
         }
-        const project = await Project.findOne({
+        const project: any = await Project.findOne({
             project_account: res.repositoryAccount.toString(),
         })
         if (!project) {
@@ -64,11 +64,8 @@ export const issueCreated = async (res: IIssueCreated) => {
                     ),
                 })
                 issue.save()
-                Project.findOneAndUpdate(
-                    { project_account: res.repositoryAccount.toString() },
-                    { $inc: { num_open_issues: 1 } },
-                    { new: true }
-                )
+                project.num_open_issues += 1
+                project.save()
                 resolve(issue)
             })
             .catch((err) => {

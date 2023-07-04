@@ -14,7 +14,7 @@ export const pullRequestAccepted = async (res: IPullRequestAccepted) => {
                 reject('User not found')
                 return
             }
-            const repository = await Project.findOne({
+            const repository: any = await Project.findOne({
                 project_account: res.repository.toString(),
             })
             if (!repository) {
@@ -38,11 +38,8 @@ export const pullRequestAccepted = async (res: IPullRequestAccepted) => {
                 issue.issue_state = 'closed'
                 issue.rewardee = res.pullRequestAddr.toString()
                 issue.save()
-                Project.findOneAndUpdate(
-                    { project_account: res.repository.toString() },
-                    { $inc: { num_open_issues: -1 } },
-                    { new: true }
-                )
+                repository.num_open_issues -= 1
+                repository.save()
                 resolve('Pull Request Accepted/Merged Successfully')
             }
         } catch (err) {
