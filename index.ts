@@ -200,22 +200,56 @@ const addUser = async (github_uid: string, user_public_key: string) => {
         userName,
         userPubkey
     )
-    const data = await program.account.verifiedUser
-        .fetch(verifiedUserAccount)
-        .catch(() => {
-            console.log('Creating New Account')
-        })
+
+    const data = await program.account.verifiedUser.fetch(verifiedUserAccount)
+
+    let verifiedUser: any = await User.findOne({
+        user_github: userName,
+    })
+
+    if (verifiedUser === null || verifiedUser === undefined) {
+        if (
+            verifiedUser.user_phantom_address !== undefined &&
+            verifiedUser.user_phantom_address !== null &&
+            verifiedUser.user_phantom_address !== ''
+        ) {
+            const verifiedUserAccount = await getVerifiedUserAccount(
+                userName,
+                verifiedUser.user_phantom_address
+            )
+            const data = await program.account.verifiedUser.fetch(
+                verifiedUserAccount
+            )
+            if (data && data != undefined) {
+                if (
+                    verifiedUser.user_phantom_address !==
+                    data.userPubkey.toString()
+                ) {
+                    return false
+                }
+                return { ...data, verifiedUserAccount: verifiedUserAccount }
+            }
+        }
+    }
+
     if (data && data != undefined) {
-        const verifiedUser: any = await User.findOne({
-            user_github: userName,
-        })
         if (
             verifiedUser.user_phantom_address === undefined ||
             verifiedUser.user_phantom_address === null ||
             verifiedUser.user_phantom_address === ''
         ) {
-            ;(verifiedUser.user_phantom_address = userPubkey.toString()),
-                verifiedUser.save()
+            verifiedUser.user_phantom_address = userPubkey.toString()
+            verifiedUser.save()
+        } else if (
+            verifiedUser.user_phantom_address !== undefined &&
+            verifiedUser.user_phantom_address !== null &&
+            verifiedUser.user_phantom_address !== ''
+        ) {
+            if (
+                verifiedUser.user_phantom_address !== data.userPubkey.toString()
+            ) {
+                return false
+            }
         }
         return { ...data, verifiedUserAccount: verifiedUserAccount }
     }
@@ -266,8 +300,8 @@ const addUser = async (github_uid: string, user_public_key: string) => {
                 verifiedUser.user_phantom_address === null ||
                 verifiedUser.user_phantom_address === ''
             ) {
-                ;(verifiedUser.user_phantom_address = userPubkey.toString()),
-                    verifiedUser.save()
+                verifiedUser.user_phantom_address = userPubkey.toString()
+                verifiedUser.save()
             }
         }
         return { ...verifiedData, verifiedUserAccount: verifiedUserAccount }

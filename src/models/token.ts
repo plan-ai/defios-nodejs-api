@@ -31,7 +31,7 @@ export const TokenSchema = new mongoose.Schema<IToken>(
             unique: true,
         },
         token_decimals: {
-            type:mongoose.Schema.Types.Number
+            type: mongoose.Schema.Types.Number,
         },
         token_image_url: {
             type: mongoose.Schema.Types.String,
