@@ -24,7 +24,7 @@ export const addChildObjective = async (res: IAddChildObjectiveEvent) => {
                     await new Promise((resolve) => setTimeout(resolve, 1000))
                 }
             }
-            const roadmap = await Roadmap.findOne({
+            const roadmap: any = await Roadmap.findOne({
                 roadmap_key: parent_objective
                     ? parent_objective.roadmap.toString()
                     : parent_roadmap.roadmap_key.toString(),
@@ -52,6 +52,7 @@ export const addChildObjective = async (res: IAddChildObjectiveEvent) => {
                         roadmap.roadmap_objectives_graph.push(
                             node + ':' + res.objectives[i].toString()
                         )
+                        roadmap.roadmap_active_objectives += 1
                     }
                 }
             }
