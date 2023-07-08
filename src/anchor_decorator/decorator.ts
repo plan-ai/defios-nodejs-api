@@ -19,11 +19,12 @@ function FunctionNameLogger() {
             ) {
                 return
             }
+            //checks if signature in handled signatured
             if (handledSignatures.has(signature)) return
 
-            // do ur stuff
-
+            //adds signature to set
             handledSignatures.add(signature)
+            //check if max set length exceeded
             let maxSignatures: number = parseInt(process.env.maxSignatures)
             if (handledSignatures.size > maxSignatures) {
                 handledSignatures.delete(
