@@ -20,93 +20,113 @@ import {
     IPullRequestUnstaked,
 } from './events'
 
-import { commitCreated } from './handlers/commitCreated' 
-import { issueCreated } from './handlers/issueCreated' 
-import { issueStaked } from './handlers/issueStaked' 
-import { issueUnstaked } from './handlers/issueUnstaked' 
-import { repositoryCreated } from './handlers/repositoryCreated' 
+import { commitCreated } from './handlers/commitCreated'
+import { issueCreated } from './handlers/issueCreated'
+import { issueStaked } from './handlers/issueStaked'
+import { issueUnstaked } from './handlers/issueUnstaked'
+import { repositoryCreated } from './handlers/repositoryCreated'
 import { addVerifiedUser } from './handlers/verifiedUserAdded'
-import { addObjectiveData } from './handlers/addObjectiveData' 
-import { addRoadmapData } from './handlers/addRoadmapData' 
-import { addChildObjective } from './handlers/addChildObjective' 
-import { addCommitToPR } from './handlers/addCommitToPR' 
-import { pullRequestSent } from './handlers/pullRequestSent' 
-import { pullRequestAccepted } from './handlers/pullRequestAccepted' 
-import { vestingScheduleChanged } from './handlers/vestingScheduleChanged' 
-import { defaultVestingScheduleChanged } from './handlers/defaultVestingScheduleChanged' 
-import { pullRequestStaked } from './handlers/pullRequestStaked' 
-import { pullRequestUnstaked } from './handlers/pullRequestUnstaked' 
-
+import { addObjectiveData } from './handlers/addObjectiveData'
+import { addRoadmapData } from './handlers/addRoadmapData'
+import { addChildObjective } from './handlers/addChildObjective'
+import { addCommitToPR } from './handlers/addCommitToPR'
+import { pullRequestSent } from './handlers/pullRequestSent'
+import { pullRequestAccepted } from './handlers/pullRequestAccepted'
+import { vestingScheduleChanged } from './handlers/vestingScheduleChanged'
+import { defaultVestingScheduleChanged } from './handlers/defaultVestingScheduleChanged'
+import { pullRequestStaked } from './handlers/pullRequestStaked'
+import { pullRequestUnstaked } from './handlers/pullRequestUnstaked'
+import { checkTransactionSignature } from './anchor_decorator/decorator'
 export const addEventListener = (program: anchor.Program<Defios>) => {
-    program.addEventListener('NameRouterCreated', (res: INameRouterCreated) => {
-        console.log('Router created!')
-        console.log(res)
-    })
+    program.addEventListener(
+        'VerifiedUserAdded',
+        (res: IVerifiedUserAdded, _, signature) => {
+            checkTransactionSignature(signature)
+            addVerifiedUser(res)
+                .then(() => {
+                    console.log('VerifiedUserAdded')
+                })
+                .catch((e) => {
+                    console.log('Error Adding User: ', e)
+                })
+        }
+    )
 
-    program.addEventListener('VerifiedUserAdded', (res: IVerifiedUserAdded) => {
-        addVerifiedUser(res)
-            .then(() => {
-                console.log('VerifiedUserAdded')
-            })
-            .catch((e) => {
-                console.log('Error Adding User: ', e)
-            })
-    })
+    program.addEventListener(
+        'CommitAdded',
+        (res: ICommitAdded, _, signature) => {
+            checkTransactionSignature(signature)
+            commitCreated(res)
+                .then(() => {
+                    console.log('CommitAdded')
+                })
+                .catch((e) => {
+                    console.log('Error Adding Commit: ', e)
+                })
+        }
+    )
 
-    program.addEventListener('CommitAdded', (res: ICommitAdded) => {
-        commitCreated(res)
-            .then(() => {
-                console.log('CommitAdded')
-            })
-            .catch((e) => {
-                console.log('Error Adding Commit: ', e)
-            })
-    })
+    program.addEventListener(
+        'IssueCreated',
+        (res: IIssueCreated, _, signature) => {
+            checkTransactionSignature(signature)
+            issueCreated(res)
+                .then(() => {
+                    console.log('IssueCreated')
+                })
+                .catch((e) => {
+                    console.log('Error Adding Issue: ', e)
+                })
+        }
+    )
 
-    program.addEventListener('IssueCreated', (res: IIssueCreated) => {
-        issueCreated(res)
-            .then(() => {
-                console.log('IssueCreated')
-            })
-            .catch((e) => {
-                console.log('Error Adding Issue: ', e)
-            })
-    })
+    program.addEventListener(
+        'RepositoryCreated',
+        (res: IRepositoryCreated, _, signature) => {
+            checkTransactionSignature(signature)
+            repositoryCreated(res)
+                .then(() => {
+                    console.log('Repository Created')
+                })
+                .catch((e) => {
+                    console.log('Error Adding Repo: ', e)
+                })
+        }
+    )
 
-    program.addEventListener('RepositoryCreated', (res: IRepositoryCreated) => {
-        repositoryCreated(res)
-            .then(() => {
-                console.log('Repository Created')
-            })
-            .catch((e) => {
-                console.log('Error Adding Repo: ', e)
-            })
-    })
+    program.addEventListener(
+        'IssueStaked',
+        (res: IIssueStaked, _, signature) => {
+            checkTransactionSignature(signature)
+            issueStaked(res)
+                .then(() => {
+                    console.log('IssueStaked')
+                })
+                .catch((e) => {
+                    console.log('Error Adding Stake: ', e)
+                })
+        }
+    )
 
-    program.addEventListener('IssueStaked', (res: IIssueStaked) => {
-        issueStaked(res)
-            .then(() => {
-                console.log('IssueStaked')
-            })
-            .catch((e) => {
-                console.log('Error Adding Stake: ', e)
-            })
-    })
-
-    program.addEventListener('IssueUnstaked', (res: IIssueUnstaked) => {
-        issueUnstaked(res)
-            .then(() => {
-                console.log('IssueUnstaked')
-            })
-            .catch((e) => {
-                console.log('Error Adding Stake: ', e)
-            })
-    })
+    program.addEventListener(
+        'IssueUnstaked',
+        (res: IIssueUnstaked, _, signature) => {
+            checkTransactionSignature(signature)
+            issueUnstaked(res)
+                .then(() => {
+                    console.log('IssueUnstaked')
+                })
+                .catch((e) => {
+                    console.log('Error Adding Stake: ', e)
+                })
+        }
+    )
 
     //New Listeners
     program.addEventListener(
         'AddObjectiveDataEvent',
-        (res: IAddObjectiveDataEvent) => {
+        (res: IAddObjectiveDataEvent, _, signature) => {
+            checkTransactionSignature(signature)
             addObjectiveData(res)
                 .then(() => {
                     console.log('ObjectiveDataAdded')
@@ -119,7 +139,8 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
 
     program.addEventListener(
         'AddRoadmapDataEvent',
-        (res: IAddRoadmapDataEvent) => {
+        (res: IAddRoadmapDataEvent, _, signature) => {
+            checkTransactionSignature(signature)
             addRoadmapData(res)
                 .then(() => {
                     console.log('RoadmapDataAdded')
@@ -132,7 +153,8 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
 
     program.addEventListener(
         'AddChildObjectiveEvent',
-        (res: IAddChildObjectiveEvent) => {
+        (res: IAddChildObjectiveEvent, _, signature) => {
+            checkTransactionSignature(signature)
             addChildObjective(res)
                 .then(() => {
                     console.log('ChildObjectiveAdded')
@@ -143,19 +165,24 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
         }
     )
 
-    program.addEventListener('PullRequestSent', (res: IPullRequestSent) => {
-        pullRequestSent(res)
-            .then(() => {
-                console.log('PullRequestSent')
-            })
-            .catch((e) => {
-                console.log('Error Adding Pull Request: ', e)
-            })
-    })
+    program.addEventListener(
+        'PullRequestSent',
+        (res: IPullRequestSent, _, signature) => {
+            checkTransactionSignature(signature)
+            pullRequestSent(res)
+                .then(() => {
+                    console.log('PullRequestSent')
+                })
+                .catch((e) => {
+                    console.log('Error Adding Pull Request: ', e)
+                })
+        }
+    )
 
     program.addEventListener(
         'CommitAddedToPullRequest',
-        (res: IAddCommitToPR) => {
+        (res: IAddCommitToPR, _, signature) => {
+            checkTransactionSignature(signature)
             addCommitToPR(res)
                 .then(() => {
                     console.log('CommitAddedToPullRequest')
@@ -168,7 +195,8 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
 
     program.addEventListener(
         'PullRequestAccepted',
-        (res: IPullRequestAccepted) => {
+        (res: IPullRequestAccepted, _, signature) => {
+            checkTransactionSignature(signature)
             pullRequestAccepted(res)
                 .then(() => {
                     console.log('PullRequestAccepted')
@@ -181,7 +209,8 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
 
     program.addEventListener(
         'VestingScheduleChanged',
-        (res: IVestingScheduleChanged) => {
+        (res: IVestingScheduleChanged, _, signature) => {
+            checkTransactionSignature(signature)
             vestingScheduleChanged(res)
                 .then(() => {
                     console.log('VestingScheduleChanged')
@@ -194,7 +223,8 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
 
     program.addEventListener(
         'DefaultVestingScheduleChanged',
-        (res: IDefaultVestingScheduleChanged) => {
+        (res: IDefaultVestingScheduleChanged, _, signature) => {
+            checkTransactionSignature(signature)
             defaultVestingScheduleChanged(res)
                 .then(() => {
                     console.log('DefaultVestingScheduleChanged')
@@ -205,19 +235,24 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
         }
     )
 
-    program.addEventListener('PullRequestStaked', (res: IPullRequestStaked) => {
-        pullRequestStaked(res)
-            .then(() => {
-                console.log('PullRequestStaked')
-            })
-            .catch((e) => {
-                console.log('Error Staking Pull Request: ', e)
-            })
-    })
+    program.addEventListener(
+        'PullRequestStaked',
+        (res: IPullRequestStaked, _, signature) => {
+            checkTransactionSignature(signature)
+            pullRequestStaked(res)
+                .then(() => {
+                    console.log('PullRequestStaked')
+                })
+                .catch((e) => {
+                    console.log('Error Staking Pull Request: ', e)
+                })
+        }
+    )
 
     program.addEventListener(
         'PullRequestUnstaked',
-        (res: IPullRequestUnstaked) => {
+        (res: IPullRequestUnstaked, _, signature) => {
+            checkTransactionSignature(signature)
             pullRequestUnstaked(res)
                 .then(() => {
                     console.log('PullRequestUnstaked')
