@@ -18,7 +18,10 @@ export const repositoryCreated = async (res: IRepositoryCreated) => {
             ) {
                 let new_metadata_uri = res.tokenMetadataUri
                     .toString()
-                    .replace('gateway.pinata.cloud', 'ipfs.io')
+                    .replace(
+                        'https://ipfs.io',
+                        'https://defi-os.infura-ipfs.io'
+                    )
                 axios.get(new_metadata_uri).then(async (response) => {
                     const tokenAddress = res.rewardsMint.toBase58()
                     let repo_token = await Token.findOne({
