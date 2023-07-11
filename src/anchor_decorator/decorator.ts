@@ -17,15 +17,15 @@ function checkTransactionSignature(signature: string) {
         throw Error('Simulated transaction')
     }
     //checks if signature in handled signatured
-    if (handledSignatures.has(signature))
-        throw Error('Duplicated equivalent event')
+    // if (handledSignatures.has(signature))
+    //     throw Error('Duplicated equivalent event')
 
-    //adds signature to set
-    handledSignatures.add(signature)
-    //check if max set length exceeded
-    let maxSignatures: number = parseInt(process.env.maxSignatures)
-    if (handledSignatures.size > maxSignatures) {
-        handledSignatures.delete(handledSignatures.values().next().value)
-    }
+    // //adds signature to set
+    // handledSignatures.add(signature)
+    // //check if max set length exceeded
+    // let maxSignatures: number = parseInt(process.env.maxSignatures)
+    // if (handledSignatures.size > maxSignatures) {
+    //     handledSignatures.delete(handledSignatures.values().next().value)
+    // }
 }
 export { checkTransactionSignature }

@@ -47,7 +47,8 @@ export const addRoadmapData = async (roadmap: IAddRoadmapDataEvent) => {
                 roadmap_cover_img_url: roadmap.roadmapImageUrl,
                 roadmap_objectives_list: objective_list,
                 roadmap_outlook: outlook,
-                roadmap_project: reposiotry.id,
+                roadmap_project: reposiotry.project_account,
+                roadmap_active_objectives: 0,
             })
 
             new_roadmap.save()

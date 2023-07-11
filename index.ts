@@ -201,7 +201,7 @@ const addUser = async (github_uid: string, user_public_key: string) => {
         userPubkey
     )
 
-    const data = await program.account.verifiedUser.fetch(verifiedUserAccount)
+    const data = await program.account.verifiedUser.fetch(verifiedUserAccount).catch((err)=>console.log(err));
 
     let verifiedUser: any = await User.findOne({
         user_github: userName,
