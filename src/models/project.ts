@@ -5,6 +5,7 @@ interface IProject {
     project_owner_github: mongoose.Schema.Types.String
     project_token: mongoose.Schema.Types.ObjectId
     project_name: mongoose.Schema.Types.String
+    project_github_id: mongoose.Schema.Types.String
     project_status: 'Secure' | 'Vulnerable' | 'Broken'
     project_repo_link: mongoose.Schema.Types.String
     top_supporter_name: mongoose.Schema.Types.String
@@ -38,6 +39,9 @@ export const ProjectSchema = new mongoose.Schema<IProject>(
             ref: 'Token',
         },
         project_name: {
+            type: mongoose.Schema.Types.String,
+        },
+        project_github_id: {
             type: mongoose.Schema.Types.String,
         },
         project_status: {

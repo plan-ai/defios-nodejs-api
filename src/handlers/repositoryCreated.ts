@@ -45,9 +45,23 @@ export const repositoryCreated = async (res: IRepositoryCreated) => {
                         reject('User not found')
                         return
                     }
+                    const repo = await axios
+                        .get(`https://api.github.com/repositories/${res.id}`, {
+                            headers: {
+                                Authorization: `Bearer ${process.env.GH_TOKEN}`,
+                            },
+                        })
+                        .then((res) => {
+                            return res.data
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                            return
+                        })
                     const project = new Project({
                         project_account: res.repositoryAccount.toString(),
-                        project_name: res.id,
+                        project_name: repo.full_name,
+                        project_github_id: res.id,
                         num_contributions: 0,
                         num_contributions_chg_perc: 0,
                         num_open_issues: 0,

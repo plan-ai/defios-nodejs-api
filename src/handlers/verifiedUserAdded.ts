@@ -7,8 +7,8 @@ export const addVerifiedUser = async (user: IVerifiedUserAdded) => {
             const verifiedUser: any = await User.findOne({
                 user_github: user.userName,
             })
-            verifiedUser.user_phantom_address = user.userPubkey.toString(),
-            verifiedUser.save()
+            ;(verifiedUser.user_phantom_address = user.userPubkey.toString()),
+                verifiedUser.save()
             resolve(verifiedUser)
         } catch (err) {
             reject(err)

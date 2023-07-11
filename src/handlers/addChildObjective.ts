@@ -56,9 +56,11 @@ export const addChildObjective = async (res: IAddChildObjectiveEvent) => {
                 }
             }
 
-            const all_objectives_of_roadmap = await RoadmapObjective.find({roadmap: roadmap.roadmap_key.toString()})
+            const all_objectives_of_roadmap = await RoadmapObjective.find({
+                roadmap: roadmap.roadmap_key.toString(),
+            })
 
-            roadmap.roadmap_active_objectives = all_objectives_of_roadmap.length;
+            roadmap.roadmap_active_objectives = all_objectives_of_roadmap.length
             await roadmap.save()
             resolve('Child Objective Added')
         } catch (err) {
