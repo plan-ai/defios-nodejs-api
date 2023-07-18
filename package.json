@@ -35,7 +35,7 @@
         "fs-promise": "^2.0.3",
         "luxon": "^3.3.0",
         "mongodb": "^5.1.0",
-        "mongoose": "^7.1.0",
+        "mongoose": "^7.3.4",
         "node-fetch": "^2.6.9",
         "supercluster": "^7.1.5",
         "ts-node": "^10.9.1",
