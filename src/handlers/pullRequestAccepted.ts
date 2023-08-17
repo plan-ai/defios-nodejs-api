@@ -34,11 +34,16 @@ export const pullRequestAccepted = async (res: IPullRequestAccepted) => {
                 reject('Issue does not belong to the Repository')
                 return
             }
+            const prAccepted: any = issue.issue_prs.filter((item: any) => {
+                return item.issue_pr_account === res.pullRequestAddr.toString()
+            })
             if (issue) {
                 issue.issue_state = 'closed'
                 issue.rewardee = res.pullRequestAddr.toString()
                 issue.save()
                 repository.num_open_issues -= 1
+                repository.coins_rewarded +=
+                    issue.issue_stake_amount + prAccepted[0].issue_vote_amount
                 repository.save()
                 resolve('Pull Request Accepted/Merged Successfully')
             }

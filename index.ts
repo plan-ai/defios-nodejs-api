@@ -7,8 +7,8 @@ import { Program } from '@project-serum/anchor'
 import { Defios, IDL } from './type-file/defios'
 import * as cors from 'cors'
 import { addEventListener } from './src/listeners'
-import * as bs58 from 'bs58'
-import { PublicKey } from '@solana/web3.js'
+import { PublicKey, Keypair } from '@solana/web3.js'
+import axios from 'axios'
 import { connectToDatabase } from './src/database'
 import fetch from 'node-fetch'
 import dotenv from 'dotenv'
@@ -18,6 +18,8 @@ import {
     getAssociatedTokenAddress,
     TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
+import fs from 'fs'
+
 dotenv.config({ path: findConfig('.env') })
 
 const app: Express = express()
@@ -39,8 +41,14 @@ const { web3 } = anchor
 
 const PROGRAM_ID = new web3.PublicKey(process.env.DEFIOS_PROGRAM_ID as string)
 
-let authSecretKey = bs58.decode(process.env.AUTH_KEY as string)
-let authKeyPair = web3.Keypair.fromSecretKey(authSecretKey)
+function loadKeypairFromFile(filename: string): Keypair {
+    const secret = JSON.parse(fs.readFileSync(filename).toString()) as number[]
+    const secretKey = Uint8Array.from(secret)
+    return Keypair.fromSecretKey(secretKey)
+}
+
+let authKeyPair = loadKeypairFromFile(process.env.ANCHOR_WALLET)
+
 const usdcMint = new web3.PublicKey(
     '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'
 )
@@ -227,7 +235,7 @@ const addUser = async (github_uid: string, user_public_key: string) => {
                     verifiedUser.user_phantom_address !==
                     data.userPubkey.toString()
                 ) {
-                    return false
+                    return verifiedUser
                 }
                 return { ...data, verifiedUserAccount: verifiedUserAccount }
             }

@@ -1,27 +1,38 @@
 import { IIssueStaked } from '../events'
 import { Issues } from '../models/issues'
 import { User } from '../models/users'
+import { Project } from '../models/project'
 
 export const issueStaked = async (res: IIssueStaked) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const user = await User.findOne({
+            const user: any = await User.findOne({
                 user_phantom_address: res.issueStaker.toString(),
             })
             if (!user) {
                 reject('User not found')
                 return
             }
-            const issue = await Issues.findOne({
+            const issue: any = await Issues.findOne({
                 issue_account: res.issueAccount.toString(),
             })
             if (!issue) {
                 reject('issue not found')
                 return
             }
+            const project: any = await Project.findOne({
+                project_account: issue.issue_project_id,
+            })
+            if (!project) {
+                reject('project not found')
+                return
+            }
             issue.issue_stake_amount =
                 res.stakedAmount.toNumber() + issue.issue_stake_amount
             issue.save()
+            project.coins_staked =
+                project.coins_staked + res.stakedAmount.toNumber()
+            project.save()
             user.user_contributions.push({
                 contributor_github: user.user_github,
                 contribution_link: res.issueContributionLink,

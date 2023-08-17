@@ -140,3 +140,6 @@ dist
 
 #ignore authorized creator wallet
 authorized_creator
+
+#ignore repo creator wallet
+anonymous_repo
