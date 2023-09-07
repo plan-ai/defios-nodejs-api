@@ -69,8 +69,6 @@ export interface IIssueCreated {
     issueCreator: PublicKey
     issueAccount: PublicKey
     repositoryAccount: PublicKey
-    issueTokenPoolAccount: PublicKey
-    rewardsMint: PublicKey
     uri: String
 }
 
@@ -85,6 +83,7 @@ export interface IRepositoryCreated {
     tokenSymbol?: String
     tokenMetadataUri?: String
     vestingAccount?: PublicKey
+    tokenImported: Boolean
 }
 
 export interface IIssueStaked {
@@ -94,6 +93,8 @@ export interface IIssueStaked {
     stakedAmount: BN
     rewardsMint: PublicKey
     issueContributionLink: String
+    stakedAt: BN
+    prVotingPower: BN
 }
 
 export interface IIssueUnstaked {

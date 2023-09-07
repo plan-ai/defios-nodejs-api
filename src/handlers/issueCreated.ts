@@ -1,35 +1,40 @@
 import axios from 'axios'
 import { IIssueCreated } from '../events'
 import { Issues } from '../models/issues'
-import { Project, ProjectSchema } from '../models/project'
-import { Token } from '../models/token'
+import { Project } from '../models/project'
 import { User } from '../models/users'
+import { Token } from '../models/token'
 const config = require('config')
 
-const token = process.env.GH_TOKEN as string
 const github_token = config.github.api_key
 console.log(github_token)
 export const issueCreated = async (res: IIssueCreated) => {
     return new Promise(async (resolve, reject) => {
         const user = await User.findOne({
-            user_phantom_address: res.issueCreator.toString(),
+            user_phantom_address: res.issueCreator?.toString(),
         })
         if (!user) {
             reject('User not found')
             return
         }
-        const token = await Token.findOne({
-            token_spl_addr: res.rewardsMint.toString(),
-        })
-        if (!token) {
-            reject('Token not found')
-            return
+
+        let project: any
+        let tries = 3
+        while (tries > 0 && !project) {
+            project = await Project.findOne({
+                project_account: res.repositoryAccount?.toString(),
+            })
+            setTimeout(() => {
+                tries--
+            }, 1000)
         }
-        const project: any = await Project.findOne({
-            project_account: res.repositoryAccount.toString(),
-        })
         if (!project) {
             reject('Project not found')
+            return
+        }
+        const token: any = await Token.findById(project.project_token)
+        if (!token) {
+            reject('Token not found')
             return
         }
         var config = {
@@ -45,7 +50,7 @@ export const issueCreated = async (res: IIssueCreated) => {
         }
 
         axios(config)
-            .then((data) => {
+            .then(async (data) => {
                 const issue = new Issues({
                     issue_account: res.issueAccount.toString(),
                     issue_creator_gh: user.user_github,
@@ -56,8 +61,7 @@ export const issueCreated = async (res: IIssueCreated) => {
                     issue_summary: data.data.body,
                     issue_gh_url: res.uri,
                     issue_stake_amount: 0,
-                    issue_stake_token_symbol: token.token_symbol,
-                    issue_stake_token_url: res.rewardsMint.toString(),
+                    issue_token: token._id,
                     issue_prs: [],
                     issue_tags: data.data.labels.map(
                         (label: any) => label.name

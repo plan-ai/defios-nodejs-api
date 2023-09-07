@@ -8,7 +8,6 @@ import { Defios, IDL } from './type-file/defios'
 import * as cors from 'cors'
 import { addEventListener } from './src/listeners'
 import { PublicKey, Keypair } from '@solana/web3.js'
-import axios from 'axios'
 import { connectToDatabase } from './src/database'
 import fetch from 'node-fetch'
 import dotenv from 'dotenv'
@@ -50,7 +49,7 @@ function loadKeypairFromFile(filename: string): Keypair {
 let authKeyPair = loadKeypairFromFile(process.env.ANCHOR_WALLET)
 
 const usdcMint = new web3.PublicKey(
-    '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'
+    'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
 )
 console.log(`Authorised creator: ${authKeyPair.publicKey.toString()}`)
 anchor.setProvider(anchor.AnchorProvider.env())
@@ -115,7 +114,7 @@ const createCommunalAccount = async (mintKeypair: string) => {
             communalUsdcAccount: communalUSDCaccount,
         })
         .signers([authKeyPair])
-        .rpc({ skipPreflight: true })
+        .rpc({ skipPreflight: false })
 }
 
 const createNamesRouter = async (
