@@ -22,9 +22,11 @@ export interface IIssuePRs {
     issue_pr_link: string
     issue_originality_score: number
     issue_author_github: string
+    issue_pr_github_name: string
     issue_pr_title: string
     issue_vote_amount: number
     issue_pr_github: string
+    issue_pr_voters: string[]
 }
 
 export const IssuePRsSchema = new mongoose.Schema<IIssuePRs>(
@@ -44,6 +46,9 @@ export const IssuePRsSchema = new mongoose.Schema<IIssuePRs>(
         issue_author_github: {
             type: mongoose.Schema.Types.String,
         },
+        issue_pr_github_name: {
+            type: mongoose.Schema.Types.String,
+        },
         issue_pr_title: {
             type: mongoose.Schema.Types.String,
         },
@@ -52,6 +57,9 @@ export const IssuePRsSchema = new mongoose.Schema<IIssuePRs>(
         },
         issue_pr_github: {
             type: mongoose.Schema.Types.String,
+        },
+        issue_pr_voters: {
+            type: [mongoose.Schema.Types.String],
         },
     },
     { versionKey: false, _id: false }

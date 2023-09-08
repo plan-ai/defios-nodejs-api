@@ -127,20 +127,8 @@ export interface IDefaultVestingScheduleChanged {
     unixChange: number
 }
 
-export interface IPullRequestStaked {
-    prStaker: PublicKey
-    prStakerTokenAccount: PublicKey
-    prAccount: PublicKey
-    stakedAmount: BN
-    rewardsMint: PublicKey
-    prContributionLink: String
-}
-
-export interface IPullRequestUnstaked {
-    prStaker: PublicKey
-    prStakerTokenAccount: PublicKey
-    prAccount: PublicKey
-    stakedAmount: BN
-    rewardsMint: PublicKey
-    prContributionLink: String
+export interface IPRVoted {
+    pullRequest: PublicKey
+    voteAmount: BN
+    voter: PublicKey
 }

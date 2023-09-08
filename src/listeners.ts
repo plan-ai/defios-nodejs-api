@@ -16,8 +16,7 @@ import {
     IPullRequestAccepted,
     IVestingScheduleChanged,
     IDefaultVestingScheduleChanged,
-    IPullRequestStaked,
-    IPullRequestUnstaked,
+    IPRVoted,
 } from './events'
 
 import { commitCreated } from './handlers/commitCreated'
@@ -34,8 +33,7 @@ import { pullRequestSent } from './handlers/pullRequestSent'
 import { pullRequestAccepted } from './handlers/pullRequestAccepted'
 import { vestingScheduleChanged } from './handlers/vestingScheduleChanged'
 import { defaultVestingScheduleChanged } from './handlers/defaultVestingScheduleChanged'
-import { pullRequestStaked } from './handlers/pullRequestStaked'
-import { pullRequestUnstaked } from './handlers/pullRequestUnstaked'
+import { pullRequestVoted } from './handlers/pullRequestVoted'
 import { checkTransactionSignature } from './anchor_decorator/decorator'
 export const addEventListener = (program: anchor.Program<Defios>) => {
     program.addEventListener(
@@ -235,33 +233,16 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
         }
     )
 
-    program.addEventListener(
-        'PullRequestStaked',
-        (res: IPullRequestStaked, _, signature) => {
-            checkTransactionSignature(signature)
-            pullRequestStaked(res)
-                .then(() => {
-                    console.log('PullRequestStaked')
-                })
-                .catch((e) => {
-                    console.log('Error Staking Pull Request: ', e)
-                })
-        }
-    )
-
-    program.addEventListener(
-        'PullRequestUnstaked',
-        (res: IPullRequestUnstaked, _, signature) => {
-            checkTransactionSignature(signature)
-            pullRequestUnstaked(res)
-                .then(() => {
-                    console.log('PullRequestUnstaked')
-                })
-                .catch((e) => {
-                    console.log('Error Unstaking Pull Request ', e)
-                })
-        }
-    )
+    program.addEventListener('PRVoted', (res: IPRVoted, _, signature) => {
+        checkTransactionSignature(signature)
+        pullRequestVoted(res)
+            .then(() => {
+                console.log('PullRequestVoted')
+            })
+            .catch((e) => {
+                console.log('Error Voting Pull Request: ', e)
+            })
+    })
 
     console.log('Listeners Added')
 }

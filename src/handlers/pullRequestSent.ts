@@ -35,9 +35,12 @@ export const pullRequestSent = async (res: IPullRequestSent) => {
                             issue_originality_score: 0,
                             issue_author_github:
                                 issue.issue_creator_gh.toString(),
+                            issue_pr_github_name:
+                                data.data.user.login.toString(),
                             issue_pr_title: data.data.title.toString(),
                             issue_vote_amount: 0,
                             issue_pr_github: data.data.user.id.toString(),
+                            issue_pr_voters: [],
                         })
                         issue.save()
                         resolve(issue)
