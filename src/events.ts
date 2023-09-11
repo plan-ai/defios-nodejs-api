@@ -132,3 +132,9 @@ export interface IPRVoted {
     voteAmount: BN
     voter: PublicKey
 }
+
+export interface IRewardClaimed {
+    reward_claimmee: PublicKey
+    reward_amount: BN
+    pull_request: PublicKey
+}
