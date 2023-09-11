@@ -14,6 +14,7 @@ export interface IIssue {
     issue_prs: IIssuePRs[]
     issue_tags: Array<mongoose.Schema.Types.String>
     rewardee: string
+    reward_claimed: mongoose.Schema.Types.Boolean
 }
 
 export interface IIssuePRs {
@@ -106,6 +107,9 @@ export const IssueSchema = new mongoose.Schema<IIssue>(
         },
         rewardee: {
             type: mongoose.Schema.Types.String,
+        },
+        reward_claimed: {
+            type: mongoose.Schema.Types.Boolean,
         },
     },
     { versionKey: false }

@@ -17,6 +17,7 @@ import {
     IVestingScheduleChanged,
     IDefaultVestingScheduleChanged,
     IPRVoted,
+    IRewardClaimed,
 } from './events'
 
 import { commitCreated } from './handlers/commitCreated'
@@ -35,6 +36,7 @@ import { vestingScheduleChanged } from './handlers/vestingScheduleChanged'
 import { defaultVestingScheduleChanged } from './handlers/defaultVestingScheduleChanged'
 import { pullRequestVoted } from './handlers/pullRequestVoted'
 import { checkTransactionSignature } from './anchor_decorator/decorator'
+import { rewardClaimed } from './handlers/rewardClaimed'
 export const addEventListener = (program: anchor.Program<Defios>) => {
     program.addEventListener(
         'VerifiedUserAdded',
@@ -243,6 +245,20 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
                 console.log('Error Voting Pull Request: ', e)
             })
     })
+
+    program.addEventListener(
+        'RewardClaimed',
+        (res: IRewardClaimed, _, signature) => {
+            checkTransactionSignature(signature)
+            rewardClaimed(res)
+                .then(() => {
+                    console.log('Reward Claimed')
+                })
+                .catch((e) => {
+                    console.log('Error claiming reward: ', e)
+                })
+        }
+    )
 
     console.log('Listeners Added')
 }
