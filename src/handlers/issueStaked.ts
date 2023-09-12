@@ -2,6 +2,7 @@ import { IIssueStaked } from '../events'
 import { Issues } from '../models/issues'
 import { User } from '../models/users'
 import { Project } from '../models/project'
+import { Token } from '../models/token'
 
 export const issueStaked = async (res: IIssueStaked) => {
     return new Promise(async (resolve, reject) => {
@@ -14,6 +15,7 @@ export const issueStaked = async (res: IIssueStaked) => {
                 return
             }
             let issue: any
+            let token: any
             let tries = 20
             while (tries > 0 && !issue) {
                 issue = await Issues.findOne({
@@ -24,8 +26,22 @@ export const issueStaked = async (res: IIssueStaked) => {
                 }, 1000)
             }
 
+            let tokenTries = 20
+            while (tokenTries > 0 && !token) {
+                if (issue && issue.issue_token) {
+                    token = await Token.findById(issue.issue_token)
+                }
+                setTimeout(() => {
+                    tokenTries--
+                }, 1000)
+            }
+
             if (!issue) {
                 reject('issue not found')
+                return
+            }
+            if (!token) {
+                reject('token not found')
                 return
             }
             const project: any = await Project.findOne({
@@ -52,8 +68,8 @@ export const issueStaked = async (res: IIssueStaked) => {
                 contribution_link: res.issueContributionLink,
                 contribution_timestamp: new Date(),
                 contribution_amt: parseFloat(res.stakedAmount),
-                contribution_token_symbol: issue.issue_stake_token_symbol,
-                contribution_token_url: issue.issue_stake_token_url,
+                contribution_token_symbol: token.token_symbol,
+                contribution_token_icon: token.token_image_url,
                 contribution_type: 'outbound',
                 contributor_project_id: issue.issue_project_id,
                 contributor_project_name: issue.issue_project_name,

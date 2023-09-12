@@ -2,6 +2,7 @@ import { IIssueUnstaked } from '../events'
 import { Issues } from '../models/issues'
 import { User } from '../models/users'
 import { Project } from '../models/project'
+import { Token } from '../models/token'
 
 export const issueUnstaked = async (res: IIssueUnstaked) => {
     return new Promise(async (resolve, reject) => {
@@ -18,6 +19,11 @@ export const issueUnstaked = async (res: IIssueUnstaked) => {
             })
             if (!issue) {
                 reject('issue not found')
+                return
+            }
+            const token = await Token.findById(issue.issue_token)
+            if (!token) {
+                reject('token not found')
                 return
             }
             const project: any = await Project.findOne({
@@ -38,8 +44,8 @@ export const issueUnstaked = async (res: IIssueUnstaked) => {
                 contribution_link: res.issueContributionLink,
                 contribution_timestamp: new Date(),
                 contribution_amt: res.unstakedAmount.toNumber(),
-                contribution_token_symbol: issue.issue_stake_token_symbol,
-                contribution_token_url: issue.issue_stake_token_url,
+                contribution_token_symbol: token.token_symbol,
+                contribution_token_icon: token.token_image_url,
                 contribution_type: 'inbound',
                 contributor_project_id: issue.issue_project_id,
                 contributor_project_name: issue.issue_project_name,
