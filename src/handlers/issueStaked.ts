@@ -14,7 +14,7 @@ export const issueStaked = async (res: IIssueStaked) => {
                 return
             }
             let issue: any
-            let tries = 10
+            let tries = 20
             while (tries > 0 && !issue) {
                 issue = await Issues.findOne({
                     issue_account: res.issueAccount.toString(),

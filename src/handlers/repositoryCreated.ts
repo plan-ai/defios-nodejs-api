@@ -31,7 +31,7 @@ export const repositoryCreated = async (res: IRepositoryCreated) => {
                     const connection = new Connection(clusterApiUrl('devnet'))
                     const mintInfo = await getMint(
                         connection,
-                        res.rewardsMint
+                        new PublicKey(tokenAddress)
                     ).catch((err) => {
                         console.log(err)
                     })

@@ -20,16 +20,26 @@ export const issueCreated = async (res: IIssueCreated) => {
 
         let project: any
         let token: any
-        let tries = 10
-        while (tries > 0 && !project && !token) {
+        let tries = 20
+        while (tries > 0 && !project) {
             project = await Project.findOne({
                 project_account: res.repositoryAccount?.toString(),
             })
-            token = await Token.findById(project.project_token)
             setTimeout(() => {
                 tries--
             }, 1000)
         }
+
+        let tokenTries = 20
+        while (tokenTries > 0 && !token) {
+            if (project && project.project_token) {
+                token = await Token.findById(project.project_token)
+            }
+            setTimeout(() => {
+                tokenTries--
+            }, 1000)
+        }
+
         if (!project) {
             reject('Project not found')
             return
