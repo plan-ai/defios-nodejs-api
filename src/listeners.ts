@@ -2,7 +2,6 @@ import * as anchor from '@project-serum/anchor'
 import { Defios } from '../type-file/defios'
 import {
     IPullRequestSent,
-    IAddCommitToPR,
     IAddChildObjectiveEvent,
     IAddObjectiveDataEvent,
     IAddRoadmapDataEvent,
@@ -20,7 +19,6 @@ import {
     IRewardClaimed,
 } from './events'
 
-import { commitCreated } from './handlers/commitCreated'
 import { issueCreated } from './handlers/issueCreated'
 import { issueStaked } from './handlers/issueStaked'
 import { issueUnstaked } from './handlers/issueUnstaked'
@@ -29,7 +27,6 @@ import { addVerifiedUser } from './handlers/verifiedUserAdded'
 import { addObjectiveData } from './handlers/addObjectiveData'
 import { addRoadmapData } from './handlers/addRoadmapData'
 import { addChildObjective } from './handlers/addChildObjective'
-import { addCommitToPR } from './handlers/addCommitToPR'
 import { pullRequestSent } from './handlers/pullRequestSent'
 import { pullRequestAccepted } from './handlers/pullRequestAccepted'
 import { vestingScheduleChanged } from './handlers/vestingScheduleChanged'
@@ -48,20 +45,6 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
                 })
                 .catch((e) => {
                     console.log('Error Adding User: ', e)
-                })
-        }
-    )
-
-    program.addEventListener(
-        'CommitAdded',
-        (res: ICommitAdded, _, signature) => {
-            checkTransactionSignature(signature)
-            commitCreated(res)
-                .then(() => {
-                    console.log('CommitAdded')
-                })
-                .catch((e) => {
-                    console.log('Error Adding Commit: ', e)
                 })
         }
     )
@@ -175,20 +158,6 @@ export const addEventListener = (program: anchor.Program<Defios>) => {
                 })
                 .catch((e) => {
                     console.log('Error Adding Pull Request: ', e)
-                })
-        }
-    )
-
-    program.addEventListener(
-        'CommitAddedToPullRequest',
-        (res: IAddCommitToPR, _, signature) => {
-            checkTransactionSignature(signature)
-            addCommitToPR(res)
-                .then(() => {
-                    console.log('CommitAddedToPullRequest')
-                })
-                .catch((e) => {
-                    console.log('Error Adding Commit to Pull Request: ', e)
                 })
         }
     )

@@ -3,15 +3,9 @@ import { BN } from '@project-serum/anchor'
 
 export interface IPullRequestSent {
     sentBy: PublicKey
-    commits: Array<PublicKey>
     metadataUri: String
     issue: PublicKey
     pullRequest: PublicKey
-}
-
-export interface IAddCommitToPR {
-    commit: PublicKey
-    by: PublicKey
 }
 
 export interface IAddChildObjectiveEvent {

@@ -10,6 +10,14 @@ const github_token = config.github.api_key
 console.log(github_token)
 export const issueCreated = async (res: IIssueCreated) => {
     return new Promise(async (resolve, reject) => {
+        const dateTime = new Date()
+
+        const formatDate = new Intl.DateTimeFormat('en-US', {
+            day: 'numeric',
+            month: 'short',
+            year: '2-digit',
+        }).format(dateTime);
+
         const user = await User.findOne({
             user_phantom_address: res.issueCreator?.toString(),
         })
@@ -77,6 +85,13 @@ export const issueCreated = async (res: IIssueCreated) => {
                     issue_tags: data.data.labels.map(
                         (label: any) => label.name
                     ),
+                    issue_stake_timeline: [
+                        {
+                            name: formatDate,
+                            value: 0,
+                            date: dateTime.valueOf()
+                        },
+                    ],
                 })
                 issue.save()
                 project.num_open_issues += 1

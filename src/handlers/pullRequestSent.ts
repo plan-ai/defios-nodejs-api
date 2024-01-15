@@ -32,7 +32,6 @@ export const pullRequestSent = async (res: IPullRequestSent) => {
                             issue_pr_account: res.pullRequest.toString(),
                             issue_pr_author: res.sentBy.toString(),
                             issue_pr_link: res.metadataUri.toString(),
-                            issue_originality_score: 0,
                             issue_author_github:
                                 issue.issue_creator_gh.toString(),
                             issue_pr_github_name:

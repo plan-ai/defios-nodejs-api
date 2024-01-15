@@ -7,6 +7,14 @@ import { Token } from '../models/token'
 export const issueStaked = async (res: IIssueStaked) => {
     return new Promise(async (resolve, reject) => {
         try {
+            const dateTime = new Date()
+
+            const formatDate = new Intl.DateTimeFormat('en-US', {
+                day: 'numeric',
+                month: 'short',
+                year: '2-digit',
+            }).format(dateTime);
+
             const user: any = await User.findOne({
                 user_phantom_address: res.issueStaker.toString(),
             })
@@ -52,22 +60,59 @@ export const issueStaked = async (res: IIssueStaked) => {
                 return
             }
             issue.issue_stake_amount =
-                parseFloat(res.stakedAmount) +
-                parseFloat(issue.issue_stake_amount)
+                parseFloat(issue.issue_stake_amount) +
+                (parseFloat(res.stakedAmount)/10**token.token_decimals)
+            
+            let found = false;
+
+            issue.issue_stakers.forEach((staker: any) => {
+                if (staker.issue_staker_account == res.issueStaker.toString()) {
+                    found = true;
+                    staker.issue_staker_amount =
+                        parseFloat(staker.issue_staker_amount) +
+                        (parseFloat(res.stakedAmount)/10**token.token_decimals)
+                }
+            })
+
+            if (!found) {
+                issue.issue_stakers.push({
+                    issue_staker_account: res.issueStaker.toString(),
+                    issue_staker_github: user.user_github,
+                    issue_staker_amount: parseFloat(res.stakedAmount)/10**token.token_decimals,
+                })
+            }
+
+            issue.issue_stake_timeline[issue.issue_stake_timeline.length - 1].data = {
+                avatar: user.user_profile_pic,
+                staker_account: res.issueStaker.toString(),
+                staker_github: user.user_github,
+                staker_name: user.user_gh_name,
+                staked: true,
+                staker_amount: parseFloat(res.stakedAmount)/10**token.token_decimals,
+            }
+
+            issue.issue_stake_timeline.push({
+                name: formatDate,
+                value: issue.issue_stake_amount,
+                date: dateTime.valueOf()
+            })
+
+            console.log(issue)
+            
             await issue.save()
             if (project.coins_staked) {
                 project.coins_staked =
                     parseFloat(project.coins_staked) +
-                    parseFloat(res.stakedAmount)
+                    parseFloat(res.stakedAmount)/10**token.token_decimals
             } else {
-                project.coins_staked = parseFloat(res.stakedAmount)
+                project.coins_staked = parseFloat(res.stakedAmount)/10**token.token_decimals
             }
             await project.save()
             user.user_contributions.push({
                 contributor_github: user.user_github,
                 contribution_link: res.issueContributionLink,
                 contribution_timestamp: new Date(),
-                contribution_amt: parseFloat(res.stakedAmount),
+                contribution_amt: parseFloat(res.stakedAmount)/10**token.token_decimals,
                 contribution_token_symbol: token.token_symbol,
                 contribution_token_icon: token.token_image_url,
                 contribution_type: 'outbound',

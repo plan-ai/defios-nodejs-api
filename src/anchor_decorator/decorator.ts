@@ -1,4 +1,3 @@
-import { sign } from 'crypto'
 import dotenv from 'dotenv'
 import findConfig from 'find-config'
 
