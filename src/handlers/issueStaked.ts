@@ -76,6 +76,8 @@ export const issueStaked = async (res: IIssueStaked) => {
 
             if (!found) {
                 issue.issue_stakers.push({
+                    issue_staker_name: user.user_gh_name,
+                    issue_staker_avatar: user.user_profile_pic,
                     issue_staker_account: res.issueStaker.toString(),
                     issue_staker_github: user.user_github,
                     issue_staker_amount: parseFloat(res.stakedAmount)/10**token.token_decimals,

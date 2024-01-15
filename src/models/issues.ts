@@ -32,6 +32,8 @@ export interface IIssuePRs {
 }
 
 export interface IIssueStakers {
+    issue_staker_avatar: string,
+    issue_staker_name: string,
     issue_staker_account: string
     issue_staker_github: string
     issue_staker_amount: number
@@ -121,6 +123,12 @@ export const IssuePRsSchema = new mongoose.Schema<IIssuePRs>(
 
 export const IssueStakersSchema = new mongoose.Schema<IIssueStakers>(
     {
+        issue_staker_avatar: {
+            type: mongoose.Schema.Types.String,
+        },
+        issue_staker_name: {
+            type: mongoose.Schema.Types.String,
+        },
         issue_staker_account: {
             type: mongoose.Schema.Types.String,
         },
